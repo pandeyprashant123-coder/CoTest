@@ -1,0 +1,117 @@
+import React, { useState } from "react"
+
+export default function ImportRepo() {
+  const [link, setLink] = useState("")
+  const [result, setResult] = useState(null)
+  const [error, setError] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const [isjs, setIsjs] = useState("Javascript")
+
+  const handlePythonSubmit = async (e) => {
+    e.preventDefault()
+    setError(null)
+    setLoading(true)
+    try {
+      const res = await fetch("/api/runtestPy", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ link }),
+      })
+      const data = await res.json()
+      if (res.ok) {
+        setResult(data)
+        setLoading(false)
+      } else {
+        setError(data.error)
+        setLoading(false)
+      }
+    } catch (err) {
+      setError("An unexpected error occurred")
+      setLoading(false)
+    }
+  }
+
+  const handleJSSubmit = async (e) => {
+    e.preventDefault()
+    setError(null)
+    setLoading(true)
+    try {
+      const res = await fetch("/api/runtest", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ link }),
+      })
+      const data = await res.json()
+      if (res.ok) {
+        setResult(data)
+        setLoading(false)
+      } else {
+        setError(data.error)
+        setLoading(false)
+      }
+    } catch (err) {
+      setError("An unexpected error occurred")
+      setLoading(false)
+    }
+  }
+
+  return (
+    <div className="flex flex-row h-[30vh] items-center justify-center">
+      <form
+        onSubmit={isjs === "Javascript" ? handleJSSubmit : handlePythonSubmit}
+        className="p-5 flex flex-col items-center gap-3 mx-auto">
+        <div className="flex flex-row w-full mx-auto gap-3">
+          <input
+            type="text"
+            id="text"
+            value={link}
+            onChange={(e) => setLink(e.target.value)}
+            placeholder="Enter GitHub repo link"
+            required
+            className="p-2 border-[1px] border-black text-black"
+          />
+          <select
+            value={isjs}
+            onChange={(e) => setIsjs(e.target.value)}
+            className="border-[1px] border-black">
+            <option value="Javascript">Javascript</option>
+            <option value="Python">Python</option>
+          </select>
+        </div>
+        <button type="submit" className="p-2 w-max border-[1px] border-black">
+          {loading ? `Loading...` : `Check Files`}
+        </button>
+      </form>
+      {error && <div style={{ color: "red" }}>{error}</div>}
+      {result && (
+        <div className="p-3 w-[90%] mx-auto border-[1px] rounded-md bg-gray-200">
+          <h2>Results</h2>
+          <ul>
+            {result.map((fileResult, index) => (
+              <li key={index}>
+                <strong>
+                  {index + 1} - {fileResult.filePath}
+                </strong>
+                {fileResult.messages ? (
+                  <ul className="flex flex-col gap-3">
+                    {fileResult.messages.map((msg, i) => (
+                      <li key={i}>
+                        {msg.line}:{msg.column} - {msg.message} ({msg.ruleId})
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <ul className="flex flex-col gap-3">No Error</ul>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  )
+}
