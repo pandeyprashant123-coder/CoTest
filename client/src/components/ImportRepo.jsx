@@ -60,7 +60,7 @@ export default function ImportRepo() {
   }
 
   return (
-    <div className="flex flex-row h-[30vh] items-center justify-center">
+    <div className="flex w-[70%] mx-auto flex-col min-h-[30vh] items-center justify-center pt-10">
       <form
         onSubmit={isjs === "Javascript" ? handleJSSubmit : handlePythonSubmit}
         className="p-5 flex flex-col items-center gap-3 mx-auto">
@@ -72,7 +72,7 @@ export default function ImportRepo() {
             onChange={(e) => setLink(e.target.value)}
             placeholder="Enter GitHub repo link"
             required
-            className="p-2 border-[1px] border-black text-black"
+            className="p-2 border-[1px] border-black text-black w-[500px]"
           />
           <select
             value={isjs}
@@ -89,17 +89,17 @@ export default function ImportRepo() {
       {error && <div style={{ color: "red" }}>{error}</div>}
       {result && (
         <div className="p-3 w-[90%] mx-auto border-[1px] rounded-md bg-gray-200">
-          <h2>Results</h2>
+          <h2 className="mb-4 font-bold text-xl">Results</h2>
           <ul>
             {result.map((fileResult, index) => (
               <li key={index}>
-                <strong>
+                <p className="font-semibold mb-1">
                   {index + 1} - {fileResult.filePath}
-                </strong>
+                </p>
                 {fileResult.messages ? (
                   <ul className="flex flex-col gap-3">
                     {fileResult.messages.map((msg, i) => (
-                      <li key={i}>
+                      <li key={i} className="mb-2">
                         {msg.line}:{msg.column} - {msg.message} ({msg.ruleId})
                       </li>
                     ))}
