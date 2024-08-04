@@ -59,6 +59,34 @@ export default function ImportRepo() {
     }
   }
 
+  const handleEslintTestSubmit = async (e) => {
+    e.preventDefault()
+    setError(null)
+    setLoading(true)
+    try {
+      const res = await fetch("/api/runtestEslint", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ link }),
+      })
+      const data = await res.json()
+      if (res.ok) {
+        setResult(data)
+        setLoading(false)
+      } else {
+        setError(data.error)
+        setLoading(false)
+      }
+      console.log(result)
+    } catch (err) {
+      setError("An unexpected error occurred")
+      setLoading(false)
+      console.log(result)
+    }
+  }
+
   return (
     <div className="flex w-[70%] mx-auto flex-col min-h-[30vh] items-center justify-center pt-10">
       <form
@@ -85,9 +113,10 @@ export default function ImportRepo() {
         <button type="submit" className="p-2 w-max border-[1px] border-black">
           {loading ? `Loading...` : `Check Files`}
         </button>
+        {/* <p>{result}</p> */}
       </form>
       {error && <div style={{ color: "red" }}>{error}</div>}
-      {result && (
+      {/* {result && (
         <div className="p-3 w-[90%] mx-auto border-[1px] rounded-md bg-gray-200">
           <h2 className="mb-4 font-bold text-xl">Results</h2>
           <ul>
@@ -111,7 +140,7 @@ export default function ImportRepo() {
             ))}
           </ul>
         </div>
-      )}
+      )} */}
     </div>
   )
 }
