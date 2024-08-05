@@ -116,7 +116,7 @@ export default function ImportRepo() {
         {/* <p>{result}</p> */}
       </form>
       {error && <div style={{ color: "red" }}>{error}</div>}
-      {/* {result && (
+      {result && (
         <div className="p-3 w-[90%] mx-auto border-[1px] rounded-md bg-gray-200">
           <h2 className="mb-4 font-bold text-xl">Results</h2>
           <ul>
@@ -140,7 +140,7 @@ export default function ImportRepo() {
             ))}
           </ul>
         </div>
-      )} */}
+      )}
     </div>
   )
 }
