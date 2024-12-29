@@ -1,0 +1,139 @@
+{
+    "rules": [
+      {
+        "id": 1,
+        "name": "Avoid deeply nested loops",
+        "description": "Flag loops nested more than 3 levels deep",
+        "languages": {
+          "javascript": {
+            "query": "(for_statement (for_statement (for_statement))) @nested_loop"
+          },
+          "python": {
+            "query": "(for_statement (for_statement (for_statement))) @nested_loop"
+          }
+        },
+        "severity": "warning"
+      },
+      {
+        "id": 2,
+        "name": "Limit function length",
+        "description": "Flag functions longer than 50 lines",
+        "languages": {
+          "javascript": {
+            "query": "(function_declaration body: (block (\n*))) @long_function",
+            "condition": "length(@long_function) > 50"
+          },
+          "python": {
+            "query": "(function_definition body: (block (\n*))) @long_function",
+            "condition": "length(@long_function) > 50"
+          }
+        },
+        "severity": "warning"
+      },
+      {
+        "id": 3,
+        "name": "Avoid var declarations",
+        "description": "Use let or const instead of var",
+        "languages": {
+          "javascript": {
+            "query": "(variable_declaration kind: ("var")) @var_declaration"
+          }
+        },
+        "severity": "error"
+      },
+      {
+        "id": 4,
+        "name": "Unused variables",
+        "description": "Detect variables that are declared but not used",
+        "languages": {
+          "javascript": {
+            "query": "(variable_declarator name: (identifier) @variable)",
+            "condition": "is_unused(@variable)"
+          },
+          "python": {
+            "query": "(assignment left: (identifier) @variable)",
+            "condition": "is_unused(@variable)"
+          }
+        },
+        "severity": "info"
+      },
+      {
+        "id": 5,
+        "name": "Ensure return in non-void functions",
+        "description": "All non-void functions must have a return statement",
+        "languages": {
+          "javascript": {
+            "query": "(function_declaration body: (block) @function_body)",
+            "condition": "!has_return_statement(@function_body)"
+          },
+          "python": {
+            "query": "(function_definition body: (block) @function_body)",
+            "condition": "!has_return_statement(@function_body)"
+          }
+        },
+        "severity": "error"
+      },
+      {
+        "id": 6,
+        "name": "Avoid infinite loops",
+        "description": "Detect loops with no exit condition",
+        "languages": {
+          "javascript": {
+            "query": "(while_statement condition: (boolean_literal value: true)) @infinite_loop"
+          },
+          "python": {
+            "query": "(while_statement test: (true)) @infinite_loop"
+          }
+        },
+        "severity": "error"
+      },
+      {
+        "id": 7,
+        "name": "Detect eval usage",
+        "description": "Avoid using eval for security reasons",
+        "languages": {
+          "javascript": {
+            "query": "(call_expression function: (identifier) @function_name (#eq? @function_name \"eval\"))"
+          }
+        },
+        "severity": "critical"
+      },
+      {
+        "id": 8,
+        "name": "Enforce === instead of ==",
+        "description": "Use strict equality checks",
+        "languages": {
+          "javascript": {
+            "query": "(binary_expression operator: \"==\") @equality_check"
+          }
+        },
+        "severity": "warning"
+      },
+      {
+        "id": 9,
+        "name": "Avoid bare except",
+        "description": "Catch specific exceptions instead of using a bare except block",
+        "languages": {
+          "python": {
+            "query": "(except_clause (pass)) @bare_except"
+          }
+        },
+        "severity": "warning"
+      },
+      {
+        "id": 10,
+        "name": "No hardcoded credentials",
+        "description": "Detect hardcoded passwords or API keys",
+        "languages": {
+          "javascript": {
+            "query": "(string (\"password\" | \"api_key\")) @sensitive_string"
+          },
+          "python": {
+            "query": "(string (\"password\" | \"api_key\")) @sensitive_string"
+          }
+        },
+        "severity": "critical"
+      }
+    ]
+  }
+  
