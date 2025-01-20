@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Avoid var Declarations",
+    "query": "(variable_declaration (variable_declarator) @var_declaration (#match? @var_declaration \"var\"))",
+    "description": "Avoid using 'var' for variable declarations. Use 'let' or 'const' instead.",
+    "severity": "warning"
+  },
+  {
+    "name": "Avoid Deeply Nested Loops",
+    "query": "(for_statement (body: (block (for_statement (body: (block (for_statement))))))) @nested_loops",
+    "description": "Avoid using loops nested deeper than two levels.",
+    "severity": "warning"
+  },
+  {
+    "name": "No Hardcoded Credentials",
+    "query": "(string_literal) @sensitive_string (#match? @sensitive_string \"(?i)(password|api_key)\")",
+    "description": "Detect hardcoded passwords or API keys.",
+    "severity": "critical"
+  }
+]
