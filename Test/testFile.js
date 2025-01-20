@@ -8,6 +8,12 @@ for (let i = 0; i < 10; i++) {
     }
   }
 }
+eval();
+const url = "http://www.google.com"; // Rule 3
+function foo(url) {
+  console.log(url);
+  console.log("Hello World");
+}
 
-const api_key = "12345"; // Rule 3
+// const api_key = "12345"; // Rule 3
 const password = "my_password"; // Rule 3
