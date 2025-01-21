@@ -12,6 +12,19 @@
     "severity": "high"
   },
   {
+    "name": "Detect Deeply Nested Loops",
+    "query": "(for_statement body: (block (for_statement body: (block (for_statement) @deeply_nested_loop))))",
+    "description": "Detects loops nested more than three levels deep.",
+    "severity": "warning"
+  },
+  {
+    "name": "Detect Potential Recursion",
+    "query": "(function_declaration name: (identifier) @function_name body: (block (expression_statement (call_expression function: (identifier) @called_function))))\n(#eq? @function_name @called_function)",
+    "description": "Detects functions that call themselves, indicating recursion.",
+    "severity": "info"
+  },
+
+  {
     "name": "Avoid Synchronous XMLHttpRequest",
     "query": "(call_expression function: (member_expression object: (identifier) @obj_name property: (property_identifier) @prop_name) (#eq? @obj_name \"XMLHttpRequest\") (#eq? @prop_name \"open\") arguments: (arguments (string) (string) (boolean) @is_sync (#eq? @is_sync \"false\")))",
     "description": "Synchronous XMLHttpRequests can lead to performance issues. Use asynchronous requests instead.",
@@ -106,5 +119,35 @@
     "description": "Identifies all instances where the 'var' keyword is used for variable declarations in JavaScript code.",
     "severity": "medium",
     "query": "(variable_declaration (variable_declarator) @var_decl)"
+  },
+  {
+    "name": "Add Braces to Control Statements",
+    "query": "(if_statement consequence: (_) @consequence)",
+    "description": "Ensure all control statements use braces to define their blocks, enhancing readability and preventing errors.",
+    "severity": "warning"
+  },
+  {
+    "name": "Avoid Concatenation in Logging Statements",
+    "query": "(call_expression function: (identifier) @func_name arguments: (arguments (binary_expression left: (string) right: (_))))",
+    "description": "Avoid string concatenation in logging statements; use template literals instead for better readability.",
+    "severity": "info"
+  },
+  {
+    "name": "Make Variables and Fields 'const' Where Possible",
+    "query": "(variable_declaration (variable_declarator name: (identifier) @var_name value: (_)))",
+    "description": "Declare variables and fields as 'const' if they are not reassigned to enhance code reliability.",
+    "severity": "warning"
+  },
+  {
+    "name": "Organize Imports",
+    "query": "(import_statement) @import",
+    "description": "Ensure imports are organized alphabetically and unused imports are removed to maintain code clarity.",
+    "severity": "info"
+  },
+  {
+    "name": "Remove Unused Variables",
+    "query": "(variable_declaration (variable_declarator name: (identifier) @var_name) (#not-any-of? @var_name))",
+    "description": "Remove variables that are declared but not used in the code to reduce clutter and potential confusion.",
+    "severity": "warning"
   }
 ]
