@@ -21,4 +21,4 @@ my-code-analyzer/ <br/>
 
 cd Test <br/>
 npm i <br/>
-node Tester
+node index.js
