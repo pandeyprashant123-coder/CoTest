@@ -1,5 +1,4 @@
 import axios from "axios";
-import { atob } from "atob";
 
 const githubApi = axios.create({
   baseURL: "https://api.github.com",
@@ -71,14 +70,8 @@ async function fetchRepoContents(repoLink, dir = "") {
 async function fetchCodeFromLink(link) {
   try {
     const response = await githubApi.get(link);
-    const { content, encoding } = response.data;
-
-    if (encoding === "base64") {
-      const decodedContent = atob(content);
-      console.log(decodedContent);
-    } else {
-      console.log("Unsupported encoding:", encoding);
-    }
+    console.log(response.data);
+    return response.data;
   } catch (error) {
     console.error("Error fetching file content:", error.message);
   }
@@ -89,11 +82,10 @@ export default async function handler(req, res) {
     try {
       const { link } = req.body;
       const jsFiles = await fetchRepoContents(link); //returns an array of link
-
+      fetchCodeFromLink(jsFiles[0]);
       // const lintResults = await lintFiles(contents);
       // console.log(lintResults);
-      console.log(jsFiles);
-      res.status(200).json("done");
+      res.status(200).json(jsFiles);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
