@@ -1,4 +1,12 @@
 import axios from "axios";
+import Parser from "tree-sitter";
+import Javascript from "tree-sitter-javascript";
+import path from "path";
+
+import analysisQueue from "./modules/bull";
+
+const parser = new Parser();
+parser.setLanguage(Javascript);
 
 const githubApi = axios.create({
   baseURL: "https://api.github.com",
@@ -70,10 +78,19 @@ async function fetchRepoContents(repoLink, dir = "") {
 async function fetchCodeFromLink(link) {
   try {
     const response = await githubApi.get(link);
-    console.log(response.data);
+    // console.log(response.data);
     return response.data;
   } catch (error) {
     console.error("Error fetching file content:", error.message);
+  }
+}
+
+async function addFilesToQueue(fileUrls) {
+  for (const fileUrl of fileUrls) {
+    const fileName = path.basename(fileUrl);
+    const code = fetchCodeFromLink(fileUrl);
+    analysisQueue.add({ code: JSON.stringify(code), fileName });
+    console.log(`Added ${fileName} files to the queue.`);
   }
 }
 
@@ -82,14 +99,28 @@ export default async function handler(req, res) {
     try {
       const { link } = req.body;
       const jsFiles = await fetchRepoContents(link); //returns an array of link
-      fetchCodeFromLink(jsFiles[0]);
+      // const code = fetchCodeFromLink(jsFiles[0]);
       // const lintResults = await lintFiles(contents);
       // console.log(lintResults);
+      // analysisQueue.add({jsFiles})
+      await addFilesToQueue(jsFiles);
+      // const tree = parser.parse(JSON.stringify(code));
+      // console.log(tree);
       res.status(200).json(jsFiles);
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      console.log(error);
+      // res.status(500).json({ error: error.message });
     }
   } else {
     res.status(405).json({ message: "Method not allowed" });
   }
 }
+
+analysisQueue.process(async (job) => {
+  const { code, fileName } = job.data;
+  console.log(`Processing file: ${fileName}`);
+  try {
+  } catch (error) {
+    console.error(`Error processing file ${fileName}: ${error.message}`);
+  }
+});

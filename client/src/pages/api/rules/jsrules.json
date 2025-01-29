@@ -1,0 +1,153 @@
+[
+  {
+    "name": "Avoid eval() Usage",
+    "query": "(call_expression function: (identifier) @func_name (#eq? @func_name \"eval\"))",
+    "description": "The use of 'eval()' can lead to security vulnerabilities. Avoid using 'eval()' in your code.",
+    "severity": "critical"
+  },
+  {
+    "name": "Detect Hardcoded Credentials",
+    "query": "(variable_declarator name: (identifier) @var_name value: (string) @var_value (#match? @var_name \"(?i)password|apiKey|secret\"))",
+    "description": "Hardcoded credentials like passwords, API keys, or secrets should not be present in the code.",
+    "severity": "high"
+  },
+  {
+    "name": "Detect Deeply Nested Loops",
+    "query": "(for_statement body: (block (for_statement body: (block (for_statement) @deeply_nested_loop))))",
+    "description": "Detects loops nested more than three levels deep.",
+    "severity": "warning"
+  },
+  {
+    "name": "Detect Potential Recursion",
+    "query": "(function_declaration name: (identifier) @function_name body: (block (expression_statement (call_expression function: (identifier) @called_function))))\n(#eq? @function_name @called_function)",
+    "description": "Detects functions that call themselves, indicating recursion.",
+    "severity": "info"
+  },
+
+  {
+    "name": "Avoid Synchronous XMLHttpRequest",
+    "query": "(call_expression function: (member_expression object: (identifier) @obj_name property: (property_identifier) @prop_name) (#eq? @obj_name \"XMLHttpRequest\") (#eq? @prop_name \"open\") arguments: (arguments (string) (string) (boolean) @is_sync (#eq? @is_sync \"false\")))",
+    "description": "Synchronous XMLHttpRequests can lead to performance issues. Use asynchronous requests instead.",
+    "severity": "medium"
+  },
+  {
+    "name": "Detect Console Log Statements",
+    "query": "(call_expression function: (member_expression object: (identifier) @obj_name property: (property_identifier) @prop_name) (#eq? @obj_name \"console\") (#eq? @prop_name \"log\"))",
+    "description": "Remove 'console.log' statements from production code to prevent potential information leakage.",
+    "severity": "low"
+  },
+  {
+    "name": "Assignment to innerHTML",
+    "description": "Detects assignments to innerHTML, which can lead to DOM-based XSS vulnerabilities.",
+    "severity": "medium",
+    "query": "(assignment_expression left: (member_expression property: (property_identifier) @property_name) (#eq? @property_name \"innerHTML\"))"
+  },
+  {
+    "name": "Use of document.write",
+    "description": "Detects usage of document.write, which can introduce security vulnerabilities.",
+    "severity": "medium",
+    "query": "(call_expression function: (member_expression object: (identifier) @object_name property: (property_identifier) @property_name) (#eq? @object_name \"document\") (#eq? @property_name \"write\"))"
+  },
+  {
+    "name": "Insecure HTTP Request",
+    "description": "Detects HTTP requests made over insecure protocols.",
+    "severity": "high",
+    "query": "(call_expression function: (identifier) @function_name arguments: (arguments (string) @url) (#match? @url \"^['\\\"]http://\"))"
+  },
+  {
+    "name": "Avoid complex flow constructs",
+    "description": "Detects usage of complex control flow constructs such as 'goto' and recursion, which can complicate code analysis and maintenance.",
+    "severity": "high",
+    "query": "(function_declaration (identifier) @function_name body: (block (function_call (identifier) @called_function_name (#eq? @called_function_name @function_name))))"
+  },
+  {
+    "name": "All loops must have fixed bounds",
+    "description": "Ensures that all loops have predetermined fixed bounds to prevent runaway code.",
+    "severity": "medium",
+    "query": "(for_statement initializer: (variable_declaration (variable_declarator name: (identifier) value: (number_literal))) condition: (binary_expression right: (number_literal)) update: (update_expression))"
+  },
+  {
+    "name": "Avoid dynamic memory allocation",
+    "description": "Detects usage of dynamic memory allocation, which can lead to unpredictable behavior in safety-critical systems.",
+    "severity": "high",
+    "query": "(call_expression function: (identifier) @function_name (#match? @function_name \"alloc|malloc|new\"))"
+  },
+  {
+    "name": "Restrict functions to a single printed page",
+    "description": "Ensures that functions are concise and fit within a single printed page for better readability and maintainability.",
+    "severity": "low",
+    "query": "(function_declaration body: (block) @body (#> @body 50))"
+  },
+  {
+    "name": "Use a minimum of two runtime assertions per function",
+    "description": "Encourages the use of at least two runtime assertions per function to catch potential errors early.",
+    "severity": "medium",
+    "query": "(function_declaration body: (block (expression_statement (call_expression function: (identifier) @function_name (#eq? @function_name \"assert\"))) @asserts (#>= @asserts 2)))"
+  },
+  {
+    "name": "Restrict the scope of data to the smallest possible",
+    "description": "Limits the scope of variables to the smallest possible context to reduce unintended interactions.",
+    "severity": "medium",
+    "query": "(variable_declaration (variable_declarator name: (identifier) @var_name) (#not-any-of? @var_name \"global\"))"
+  },
+  {
+    "name": "Check the return value of all non-void functions",
+    "description": "Ensures that the return values of all non-void functions are checked to prevent unnoticed errors.",
+    "severity": "high",
+    "query": "(call_expression function: (identifier) @function_name (#not-any-of? @function_name \"void\"))"
+  },
+  {
+    "name": "Use the preprocessor sparingly",
+    "description": "Discourages excessive use of the preprocessor, which can obscure code logic and hinder analysis.",
+    "severity": "low",
+    "query": "(preprocessor_directive) @directive"
+  },
+  {
+    "name": "Limit pointer use to a single dereference",
+    "description": "Restricts pointer usage to a single level of dereferencing to simplify code and reduce errors.",
+    "severity": "medium",
+    "query": "(member_expression object: (identifier) @object property: (identifier) @property)"
+  },
+  {
+    "name": "Compile with all possible warnings active",
+    "description": "Advises compiling code with all warnings enabled and addressing them to maintain code quality.",
+    "severity": "high",
+    "query": "(comment) @comment (#match? @comment \"TODO|FIXME|WARNING\")"
+  },
+  {
+    "name": "Detect 'var' Declarations",
+    "description": "Identifies all instances where the 'var' keyword is used for variable declarations in JavaScript code.",
+    "severity": "medium",
+    "query": "(variable_declaration (variable_declarator) @var_decl)"
+  },
+  {
+    "name": "Add Braces to Control Statements",
+    "query": "(if_statement consequence: (_) @consequence)",
+    "description": "Ensure all control statements use braces to define their blocks, enhancing readability and preventing errors.",
+    "severity": "warning"
+  },
+  {
+    "name": "Avoid Concatenation in Logging Statements",
+    "query": "(call_expression function: (identifier) @func_name arguments: (arguments (binary_expression left: (string) right: (_))))",
+    "description": "Avoid string concatenation in logging statements; use template literals instead for better readability.",
+    "severity": "info"
+  },
+  {
+    "name": "Make Variables and Fields 'const' Where Possible",
+    "query": "(variable_declaration (variable_declarator name: (identifier) @var_name value: (_)))",
+    "description": "Declare variables and fields as 'const' if they are not reassigned to enhance code reliability.",
+    "severity": "warning"
+  },
+  {
+    "name": "Organize Imports",
+    "query": "(import_statement) @import",
+    "description": "Ensure imports are organized alphabetically and unused imports are removed to maintain code clarity.",
+    "severity": "info"
+  },
+  {
+    "name": "Remove Unused Variables",
+    "query": "(variable_declaration (variable_declarator name: (identifier) @var_name) (#not-any-of? @var_name))",
+    "description": "Remove variables that are declared but not used in the code to reduce clutter and potential confusion.",
+    "severity": "warning"
+  }
+]
