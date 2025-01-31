@@ -22,3 +22,8 @@ my-code-analyzer/ <br/>
 cd Test <br/>
 npm i <br/>
 node index.js
+
+## packages 
+npm install eslint eslint-plugin-security eslint-plugin-sonarjs \
+            eslint-config-airbnb-base eslint-plugin-import \
+            @typescript-eslint/eslint-plugin @typescript-eslint/parser --save-dev
