@@ -50,31 +50,6 @@ async function fetchRepoContents(repoLink, dir = "") {
   }
 }
 
-// async function fetchFileContent(url) {
-//   const response = await fetch(url);
-//   if (!response.ok) {
-//     throw new Error(`Failed to fetch file content: ${response.statusText}`);
-//   }
-//   return response.text();
-// }
-
-// async function lintFiles(files) {
-//   const eslint = new ESLint();
-//   const results = [];
-
-//   for (const file of files) {
-//     if (file.name.endsWith(".js")) {
-//       const content = await fetchFileContent(file.download_url);
-//       const lintResults = await eslint.lintText(content, {
-//         filePath: file.path,
-//       });
-//       results.push(...lintResults);
-//     }
-//   }
-
-//   return results;
-// }
-
 async function fetchCodeFromLink(link) {
   try {
     const response = await githubApi.get(link);

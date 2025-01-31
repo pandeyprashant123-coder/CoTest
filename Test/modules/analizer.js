@@ -4,8 +4,8 @@ const fs = require("fs");
 const chalk = require("chalk");
 
 const detectDeeplyNestedLoops = require("./nestedloop");
-const detectRecursiveFunctions = require("./recursion");
 const detectInfiniteRecursion = require("./resursion2");
+const detectHardcodedCredentials = require("./detectCredentials");
 // Initialize the parser
 const parser = new Parser();
 parser.setLanguage(JavaScript);
@@ -61,6 +61,8 @@ function analyzeCode(code) {
   //recursions
   // detectRecursiveFunctions(tree.rootNode);
   detectInfiniteRecursion(tree.rootNode);
+
+  detectHardcodedCredentials(tree.rootNode);
 
   console.log(chalk.bold.blue("\n===== Analysis Summary ====="));
   console.log(`  Total Rules Applied: ${rules.length}`);

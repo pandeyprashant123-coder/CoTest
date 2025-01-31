@@ -17,6 +17,7 @@ function foo(url) {
 
 const API_KEY = "12345"; // Rule 3
 const password = "my_password"; // Rule 3
+const JWT_SECRET = "mtysecret";
 
 // Recursive function to calculate factorial
 function factorial(n) {
