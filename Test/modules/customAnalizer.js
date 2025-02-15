@@ -80,7 +80,7 @@ function analyzeCode(code) {
     detectInfiniteRecursion(tree.rootNode),
     detectHardcodedCredentials(tree.rootNode)
   );
-  console.log(mainMessage);
+  return mainMessage;
 
   console.log(chalk.bold.blue("\n===== Analysis Summary ====="));
   console.log(`  Total Rules Applied: ${rules.length}`);

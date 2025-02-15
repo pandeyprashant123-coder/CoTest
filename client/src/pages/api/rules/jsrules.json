@@ -7,10 +7,11 @@
   },
   {
     "name": "Detect Hardcoded Credentials",
-    "query": "(variable_declarator name: (identifier) @var_name value: (string) @var_value (#match? @var_name \"(?i)password|apiKey|secret\"))",
-    "description": "Hardcoded credentials like passwords, API keys, or secrets should not be present in the code.",
+    "query": "(variable_declarator name: (identifier) @var_name value: (string) @var_value (#match? @var_name \"(?i)^(password|pass|pwd|apikey|api_key|access[_-]?key|client[_-]?id|client[_-]?secret|secret|private[_-]?key|auth[_-]?token|bearer[_-]?token|session[_-]?key|database[_-]?url|jwt[_-]?secret|encryption[_-]?key|ACCESS[_-]?TOKEN|JWT[_-]?SECRET|API[_-]?KEY|SECRET[_-]?KEY|PRIVATE[_-]?KEY|AUTH[_-]?TOKEN|BEARER[_-]?TOKEN|SESSION[_-]?ID|DB[_-]?URL|ENCRYPTION[_-]?KEY)$\"))",
+    "description": "Detects hardcoded credentials like passwords, API keys, or secrets in variable assignments.",
     "severity": "high"
   },
+
   {
     "name": "Detect Deeply Nested Loops",
     "query": "(for_statement body: (block (for_statement body: (block (for_statement) @deeply_nested_loop))))",
