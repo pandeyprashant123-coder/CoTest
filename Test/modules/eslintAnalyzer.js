@@ -82,8 +82,8 @@ async function lintCode(code, filename = "testFile.js") {
   await ESLint.outputFixes(results);
   const formatter = await eslint.loadFormatter("stylish");
   //   console.log(formatter.format(results));
-  console.log(results[0].messages);
-  return results;
+  // console.log(results[0].messages);
+  return results[0].messages;
 }
 
 module.exports = lintCode;

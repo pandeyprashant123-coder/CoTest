@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   env: {
-    PERSONAL_ACCESS_TOKEN: "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",
+    PERSONAL_ACCESS_TOKEN: "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",
   },
 };
 
