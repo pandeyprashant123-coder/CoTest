@@ -1,13 +1,13 @@
 import analyzeCode from "../modules/customanalizer";
 import lintCode from "../modules/esanalizer";
 
-export async function test() {
-  const msg1 = analyzeCode(code);
+export async function test(code) {
+  const msg1 = await analyzeCode(code);
   const msg2 = await lintCode(code);
-
   const message = msg1.concat(msg2);
-  const finalmsg = filter(message);
-  console.log(finalmsg.sort((a, b) => b.line - a.line));
+  const msg = filter(message);
+  const finalmsg = msg.sort((a, b) => b.line - a.line);
+  return finalmsg;
 }
 
 function filter(msg) {
