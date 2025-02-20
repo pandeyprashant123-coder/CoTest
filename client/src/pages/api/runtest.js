@@ -1,55 +1,78 @@
 import axios from "axios";
+import { z } from "zod";
+import Redis from "ioredis";
 
 import analysisQueue from "./config/bull";
-import { fetchRepoContents } from "./services/GithubActions";
+import {
+  fetchRepoContentsJavascript,
+  fetchRepoContentsPython,
+} from "./services/GithubActions";
 import { test } from "./services/analizer";
 import { addFilesToQueue } from "./services/queue";
+import { repoSchema } from "./validation/github";
+
+const redis = new Redis();
 
 export default async function handler(req, res) {
-  if (req.method === "POST") {
-    try {
-      const { link, language } = req.body;
-      const files = await fetchRepoContents(link, language);
-      console.log(`Found ${files.length} ${language} files in the repo.`);
-      await addFilesToQueue(files, language);
-      // const code = await fetchCodeFromLink(jsFiles[0]);
-      // const message = await lintCode(code);
-      // console.log(message);
-      res.status(200).json(files);
-    } catch (error) {
-      console.error("Error in handler:", error.message);
-      res.status(500).json({ error: error.message });
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
+
+  try {
+    const { link, language } = repoSchema.parse(req.body);
+    let files;
+
+    if (language === "Javascript") {
+      files = await fetchRepoContentsJavascript(link);
+    } else if (language === "Python") {
+      files = await fetchRepoContentsPython(link);
     }
-  } else {
-    res.status(405).json({ message: "Method not allowed" });
+    await addFilesToQueue(files, language);
+    if (files.length === 0) {
+      return res
+        .status(404)
+        .json({ error: "No files found in the repository" });
+    }
+
+    const fileNames = files.map((fileUrl) => {
+      const parts = fileUrl.split("/");
+      return parts[parts.length - 1]; // Extract filename from URL
+    });
+
+    res.status(200).json({ files: fileNames });
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
   }
 }
 
 analysisQueue.process(async (job) => {
   const { code, fileName, language } = job.data;
-
   console.log(`Processing file: ${fileName}`);
+
   if (!code) {
     console.log(`No code received for ${fileName}`);
     return;
   }
 
   try {
+    let message;
     if (language === "Javascript") {
-      const message = await test(code);
-      console.log(`Analysis result for ${fileName}: ${message}`);
+      message = await test(code);
     } else if (language === "Python") {
-      axios
-        .post("http://127.0.0.1:8001/review_python_code", { code })
-        .then((response) => {
-          console.log(response.data);
-        })
-        .catch((error) => {
-          console.error("Error analyzing code:", error.message);
-        });
+      const response = await axios.post(
+        "http://127.0.0.1:8001/review_python_code",
+        { code }
+      );
+      message = response.data;
     }
 
-    // console.log(`Analysis result for ${fileName}: ${message}`);
+    const result = {
+      code,
+      message,
+    };
+    // Store result in Redis
+    await redis.set(`report:${fileName}`, JSON.stringify(result));
+    console.log(`Stored analysis for ${fileName}`);
   } catch (error) {
     console.error(`Error analyzing code for ${fileName}:`, error.message);
   }

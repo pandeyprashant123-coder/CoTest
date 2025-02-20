@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { useRouter } from "next/router";
+import React, { useState, useEffect } from "react";
 
 export default function ImportRepo() {
   const [link, setLink] = useState("");
@@ -6,6 +7,8 @@ export default function ImportRepo() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [language, setLanguage] = useState("Javascript");
+  const [files, setFiles] = useState([]);
+  const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,7 +24,7 @@ export default function ImportRepo() {
       });
       const data = await res.json();
       if (res.ok) {
-        setResult(data);
+        setFiles(data.files);
         setLoading(false);
       } else {
         setError(data.error);
@@ -31,6 +34,11 @@ export default function ImportRepo() {
       setError("An unexpected error occurred");
       setLoading(false);
     }
+  };
+
+  const handleFileClick = (fileName) => {
+    const url = `/codeViewer?file=${encodeURIComponent(fileName)}`;
+    window.open(url, "_blank");
   };
 
   return (
@@ -64,31 +72,25 @@ export default function ImportRepo() {
         {/* <p>{result}</p> */}
       </form>
       {error && <div style={{ color: "red" }}>{error}</div>}
-      {result && (
-        <div className="p-3 w-[90%] mx-auto border-[1px] rounded-md bg-gray-200">
-          <h2 className="mb-4 font-bold text-xl">Results</h2>
-          <ul>
-            {result.map((fileResult, index) => (
-              <li key={index}>
-                <p className="font-semibold mb-1">
-                  {index + 1} - {fileResult.filePath}
-                </p>
-                {fileResult.messages ? (
-                  <ul className="flex flex-col gap-3">
-                    {fileResult.messages.map((msg, i) => (
-                      <li key={i} className="mb-2">
-                        {msg.line}:{msg.column} - {msg.message} ({msg.ruleId})
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <ul className="flex flex-col gap-3">No Error</ul>
-                )}
+
+      <div className="p-3 w-[90%] mx-auto border-[1px] rounded-md bg-gray-200">
+        <h2 className="mb-4 font-bold text-xl">Results</h2>
+        <ul>
+          {files.length > 0 ? (
+            files.map((file, index) => (
+              <li
+                key={index}
+                className="p-2 bg-gray-100 rounded mt-1 cursor-pointer hover:bg-gray-700 transition"
+                onClick={() => handleFileClick(file)}
+              >
+                {file}
               </li>
-            ))}
-          </ul>
-        </div>
-      )}
+            ))
+          ) : (
+            <p>No files found.</p>
+          )}
+        </ul>
+      </div>
     </div>
   );
 }
