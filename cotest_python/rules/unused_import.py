@@ -12,7 +12,8 @@ class UnusedImportsRule(BaseRule):
 
     def visit_Import(self, node: ast.Import) -> None:
         for alias in node.names:
-            self.imports[alias.name] = node.lineno
+            import_name = alias.asname if alias.asname else alias.name
+            self.imports[import_name] = node.lineno
 
     def visit_ImportFrom(self, node: ast.ImportFrom) -> None:
         for alias in node.names:
