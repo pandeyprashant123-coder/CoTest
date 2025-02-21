@@ -1,14 +1,21 @@
-import ImportRepo from "@/components/ImportRepo"
-import React from "react"
+import ImportRepo from "@/components/ImportRepo";
+import React from "react";
+import Head from "next/head";
 
 const Check = () => {
   return (
-    <div className="font-[Inter]">
-      <div>
-        <ImportRepo />
+    <>
+      <Head>
+        <title>check page</title>
+        <meta property="og:description" content="a good chack page" />
+      </Head>
+      <div className="font-[Inter]">
+        <div>
+          <ImportRepo />
+        </div>
       </div>
-    </div>
-  )
-}
+    </>
+  );
+};
 
-export default Check
+export default Check;

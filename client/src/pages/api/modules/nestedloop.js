@@ -1,5 +1,3 @@
-// Function to detect deeply nested loops
-const chalk = require("chalk");
 let messages = [];
 function traverse(node, depth = 0, maxDepth = 3) {
   // console.log(node);
@@ -18,13 +16,6 @@ function traverse(node, depth = 0, maxDepth = 3) {
       message.line = startPosition.row + 1;
       message.column = startPosition.column + 1;
       messages.push(message);
-      console.log(
-        chalk.red(
-          `Deeply nested loop detected at Line ${
-            startPosition.row + 1
-          }, Depth: ${depth}`
-        )
-      );
     }
   }
 
@@ -34,8 +25,9 @@ function traverse(node, depth = 0, maxDepth = 3) {
 }
 
 function detectDeeplyNestedLoops(node) {
+  let messages = [];
   traverse(node);
   return messages;
 }
 
-module.exports = detectDeeplyNestedLoops;
+export default detectDeeplyNestedLoops;

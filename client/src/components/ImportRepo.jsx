@@ -1,97 +1,52 @@
-import React, { useState } from "react"
+import { useRouter } from "next/router";
+import React, { useState, useEffect } from "react";
 
 export default function ImportRepo() {
-  const [link, setLink] = useState("")
-  const [result, setResult] = useState(null)
-  const [error, setError] = useState(null)
-  const [loading, setLoading] = useState(false)
-  const [isjs, setIsjs] = useState("Javascript")
+  const [link, setLink] = useState("");
+  const [result, setResult] = useState(null);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [language, setLanguage] = useState("Javascript");
+  const [files, setFiles] = useState([]);
+  const router = useRouter();
 
-  const handlePythonSubmit = async (e) => {
-    e.preventDefault()
-    setError(null)
-    setLoading(true)
-    try {
-      const res = await fetch("/api/runtestPy", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ link }),
-      })
-      const data = await res.json()
-      if (res.ok) {
-        setResult(data)
-        setLoading(false)
-      } else {
-        setError(data.error)
-        setLoading(false)
-      }
-    } catch (err) {
-      setError("An unexpected error occurred")
-      setLoading(false)
-    }
-  }
-
-  const handleJSSubmit = async (e) => {
-    e.preventDefault()
-    setError(null)
-    setLoading(true)
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError(null);
+    setLoading(true);
     try {
       const res = await fetch("/api/runtest", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ link }),
-      })
-      const data = await res.json()
+        body: JSON.stringify({ link, language }),
+      });
+      const data = await res.json();
       if (res.ok) {
-        setResult(data)
-        setLoading(false)
+        setFiles(data.files);
+        setLoading(false);
       } else {
-        setError(data.error)
-        setLoading(false)
+        setError(data.error);
+        setLoading(false);
       }
     } catch (err) {
-      setError("An unexpected error occurred")
-      setLoading(false)
+      setError("An unexpected error occurred");
+      setLoading(false);
     }
-  }
+  };
 
-  const handleEslintTestSubmit = async (e) => {
-    e.preventDefault()
-    setError(null)
-    setLoading(true)
-    try {
-      const res = await fetch("/api/runtestEslint", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ link }),
-      })
-      const data = await res.json()
-      if (res.ok) {
-        setResult(data)
-        setLoading(false)
-      } else {
-        setError(data.error)
-        setLoading(false)
-      }
-      console.log(result)
-    } catch (err) {
-      setError("An unexpected error occurred")
-      setLoading(false)
-      console.log(result)
-    }
-  }
+  const handleFileClick = (fileName) => {
+    const url = `/codeViewer?file=${encodeURIComponent(fileName)}`;
+    window.open(url, "_blank");
+  };
 
   return (
     <div className="flex w-[70%] mx-auto flex-col min-h-[30vh] items-center justify-center pt-10">
       <form
-        onSubmit={isjs === "Javascript" ? handleJSSubmit : handlePythonSubmit}
-        className="p-5 flex flex-col items-center gap-3 mx-auto">
+        onSubmit={handleSubmit}
+        className="p-5 flex flex-col items-center gap-3 mx-auto"
+      >
         <div className="flex flex-row w-full mx-auto gap-3">
           <input
             type="text"
@@ -103,9 +58,10 @@ export default function ImportRepo() {
             className="p-2 border-[1px] border-black text-black w-[500px]"
           />
           <select
-            value={isjs}
-            onChange={(e) => setIsjs(e.target.value)}
-            className="border-[1px] border-black">
+            value={language}
+            onChange={(e) => setLanguage(e.target.value)}
+            className="border-[1px] border-black"
+          >
             <option value="Javascript">Javascript</option>
             <option value="Python">Python</option>
           </select>
@@ -116,31 +72,25 @@ export default function ImportRepo() {
         {/* <p>{result}</p> */}
       </form>
       {error && <div style={{ color: "red" }}>{error}</div>}
-      {result && (
-        <div className="p-3 w-[90%] mx-auto border-[1px] rounded-md bg-gray-200">
-          <h2 className="mb-4 font-bold text-xl">Results</h2>
-          <ul>
-            {result.map((fileResult, index) => (
-              <li key={index}>
-                <p className="font-semibold mb-1">
-                  {index + 1} - {fileResult.filePath}
-                </p>
-                {fileResult.messages ? (
-                  <ul className="flex flex-col gap-3">
-                    {fileResult.messages.map((msg, i) => (
-                      <li key={i} className="mb-2">
-                        {msg.line}:{msg.column} - {msg.message} ({msg.ruleId})
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <ul className="flex flex-col gap-3">No Error</ul>
-                )}
+
+      <div className="p-3 w-[90%] mx-auto border-[1px] rounded-md bg-gray-200">
+        <h2 className="mb-4 font-bold text-xl">Results</h2>
+        <ul>
+          {files.length > 0 ? (
+            files.map((file, index) => (
+              <li
+                key={index}
+                className="p-2 bg-gray-100 rounded mt-1 cursor-pointer hover:bg-gray-700 transition"
+                onClick={() => handleFileClick(file)}
+              >
+                {file}
               </li>
-            ))}
-          </ul>
-        </div>
-      )}
+            ))
+          ) : (
+            <p>No files found.</p>
+          )}
+        </ul>
+      </div>
     </div>
-  )
+  );
 }

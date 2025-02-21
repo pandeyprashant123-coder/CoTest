@@ -1,5 +1,5 @@
-import Hero from "@/components/Home/Hero"
-import TrustedBy from "@/components/Home/TrustedBy"
+import Hero from "@/components/Home/Hero";
+import TrustedBy from "@/components/Home/TrustedBy";
 
 export default function Home() {
   return (
@@ -14,5 +14,5 @@ export default function Home() {
         <TrustedBy />
       </div>
     </div>
-  )
+  );
 }
