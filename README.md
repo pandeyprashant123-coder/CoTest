@@ -11,7 +11,10 @@ npm run dev
 #### In new Terminal: 
 
 #### For Windows & Linux:
-`wsl` (skip for Linux) 
+
+```
+wsl //skip for linux
+```
 ```
 sudo apt-get update 
 sudo apt-get install redis 
