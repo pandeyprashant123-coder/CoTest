@@ -18,35 +18,35 @@ my-code-analyzer/ <br/>
 └── README.md
 
 ## TO RUN Client(req)
-Requirements: Node, Redis <br/>
+#### Requirements: Node, Redis <br/>
 cd Client <br/>
 npm i <br/>
 npm run dev <br/>
 
-# In new Terminal: <br/>
+### In new Terminal: <br/>
 
-# For Windows & Linux:
+#### For Windows & Linux:
 wsl (skip for Linux) <br/>
 sudo apt-get update <br/>
 sudo apt-get install redis <br/>
 redis-server <br/>
 
-# For MacOs: 
+#### For MacOs: 
 brew install redis <br/> 
 redis-server
 
-# To Run Cotest_python(req)
+## To Run Cotest_python(req)
 Requiremets: Python, FastApi
 pip install -r <br/>
 python -m cotest_python.api
 
-## TO RUN TEST FILE (opt)
+### TO RUN TEST FILE (opt)
 
 cd Test <br/>
 npm i <br/>
 node index.js
 
-## some packages 
+#### some packages 
 npm install eslint eslint-plugin-security eslint-plugin-sonarjs \
             eslint-config-airbnb-base eslint-plugin-import \
             @typescript-eslint/eslint-plugin @typescript-eslint/parser --save-dev
