@@ -40,23 +40,20 @@ node index.js
 
 ## ﻿CoTest Workflow
 ```
-my-code-analyzer/ <br/>
-├── src/<br/>
-│   ├── main/<br/>
-│   │   ├── lexer/<br/>
-│   │   ├── parser/<br/>
-│   │   ├── analyzer/<br/>
-│   │   ├── rules/<br/>
-│   │   └── reports/<br/>
-│   ├── test/<br/>
-│   │   ├── lexer/<br/>
-│   │   ├── parser/<br/>
-│   │   ├── analyzer/<br/>
-│   │   ├── rules/<br/>
-│   │   └── reports/<br/>
-├── docs/<br/>
-├── examples/<br/>
-└── README.md
+my-code-analyzer/ 
+├── src/
+│   ├── main/
+│   │   ├── lexer/
+│   │   ├── parser/
+│   │   ├── analyzer/
+│   │   ├── rules/
+│   │   └── reports/
+│   ├── test/
+│   │   ├── lexer/
+│   │   ├── parser/
+│   │   ├── analyzer/
+│   │   ├── rules/
+│   │   └── reports/
 ```
 #### some packages 
 `npm install eslint eslint-plugin-security eslint-plugin-sonarjs \
