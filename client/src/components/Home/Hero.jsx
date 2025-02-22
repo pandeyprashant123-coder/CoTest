@@ -2,6 +2,7 @@ import Link from "next/link"
 import React from "react"
 
 const Hero = () => {
+  
   return (
     <div className="flex flex-col mx-auto w-[80%] gap-9">
       <div className="mx-auto flex flex-col gap-1 items-center justify-center">
