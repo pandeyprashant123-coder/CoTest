@@ -1,6 +1,7 @@
-import Image from "next/image"
-import Link from "next/link"
-import React from "react"
+import Image from "next/image";
+import Link from "next/link";
+import React from "react";
+import LoginButton from "./LoginButton";
 
 //Inter font
 
@@ -9,7 +10,8 @@ const Navbar = () => {
     <div className="flex flex-row justify-between items-center w-[70%] py-3 mx-auto font-[Inter]">
       <Link
         href="/"
-        className="flex flex-row gap-2 items-center cursor-pointer">
+        className="flex flex-row gap-2 items-center cursor-pointer"
+      >
         <Image
           src="/Logo CoTest.png"
           width={30}
@@ -22,19 +24,20 @@ const Navbar = () => {
         <ul className="flex flex-row gap-5">
           <Link href="/">Home</Link>
           <Link href="/">About</Link>
-          <Link href="/">Service</Link>
+          <Link href="/repository">Repository</Link>
           <Link href="/">Blog</Link>
           <Link href="/check">Contact</Link>
         </ul>
       </div>
       <div className="flex flex-row gap-5 items-center">
-        <p className="cursor-pointer">Sign In</p>
+        {/* <p className="cursor-pointer">Sign In</p>
         <p className="border-[1px] text-[#715DE3] border-[#715DE3] cursor-pointer px-4 py-1 rounded-md">
           Sign Up
-        </p>
+        </p> */}
+        <LoginButton />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;
