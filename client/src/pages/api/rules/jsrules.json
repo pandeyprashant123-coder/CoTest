@@ -27,15 +27,9 @@
 
   {
     "name": "Avoid Synchronous XMLHttpRequest",
-    "query": "(call_expression function: (member_expression object: (identifier) @obj_name property: (property_identifier) @prop_name) (#eq? @obj_name \"XMLHttpRequest\") (#eq? @prop_name \"open\") arguments: (arguments (string) (string) (boolean) @is_sync (#eq? @is_sync \"false\")))",
+    "query": "(call_expression function: (member_expression object: (identifier) @obj_name property: (property_identifier) @prop_name) (#eq? @obj_name \"XMLHttpRequest\") (#eq? @prop_name \"open\") arguments: (argument_list (identifier) @arg_name) (#not-match? @arg_name \"error\"))",
     "description": "Synchronous XMLHttpRequests can lead to performance issues. Use asynchronous requests instead.",
     "severity": "medium"
-  },
-  {
-    "name": "Detect Console Log Statements",
-    "query": "(call_expression function: (member_expression object: (identifier) @obj_name property: (property_identifier) @prop_name) (#eq? @obj_name \"console\") (#eq? @prop_name \"log\"))",
-    "description": "Remove 'console.log' statements from production code to prevent potential information leakage.",
-    "severity": "low"
   },
   {
     "name": "Assignment to innerHTML",
@@ -91,12 +85,7 @@
     "severity": "medium",
     "query": "(variable_declaration (variable_declarator name: (identifier) @var_name) (#not-any-of? @var_name \"global\"))"
   },
-  {
-    "name": "Check the return value of all non-void functions",
-    "description": "Ensures that the return values of all non-void functions are checked to prevent unnoticed errors.",
-    "severity": "high",
-    "query": "(call_expression function: (identifier) @function_name (#not-any-of? @function_name \"void\"))"
-  },
+
   {
     "name": "Use the preprocessor sparingly",
     "description": "Discourages excessive use of the preprocessor, which can obscure code logic and hinder analysis.",
@@ -138,12 +127,6 @@
     "query": "(variable_declaration (variable_declarator name: (identifier) @var_name value: (_)))",
     "description": "Declare variables and fields as 'const' if they are not reassigned to enhance code reliability.",
     "severity": "warning"
-  },
-  {
-    "name": "Organize Imports",
-    "query": "(import_statement) @import",
-    "description": "Ensure imports are organized alphabetically and unused imports are removed to maintain code clarity.",
-    "severity": "info"
   },
   {
     "name": "Remove Unused Variables",

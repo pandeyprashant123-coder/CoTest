@@ -1,4 +1,5 @@
 import Navbar from "@/components/Navbar";
+import { RatingProvider } from "@/context/RatingProvider";
 import "@/styles/globals.css";
 import { SessionProvider } from "next-auth/react";
 export default function App({
@@ -7,8 +8,10 @@ export default function App({
 }) {
   return (
     <SessionProvider session={session}>
-      <Navbar />
-      <Component {...pageProps} />;
+      <RatingProvider>
+        <Navbar />
+        <Component {...pageProps} />;
+      </RatingProvider>
     </SessionProvider>
   );
 }
