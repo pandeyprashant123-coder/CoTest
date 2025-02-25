@@ -1,6 +1,6 @@
-export const fetchGitHubRepos = async (accessToken) => {
+export const fetchGitHubRepos = async (accessToken, limit, page) => {
   const res = await fetch(
-    "https://api.github.com/user/repos?per_page=100&page=1",
+    `https://api.github.com/user/repos?per_page=${limit}&page=${page}`,
     {
       headers: {
         Authorization: `Bearer ${accessToken}`,

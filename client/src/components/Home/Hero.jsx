@@ -1,18 +1,9 @@
-import { fetchGitHubRepos } from "@/utils/fetchGithubRepos";
-import { useSession } from "next-auth/react";
-import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import RepoListModal from "../RepoListModal";
 
 const Hero = () => {
-  const { data: session } = useSession();
-  const [repos, setRepos] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  useEffect(() => {
-    if (session?.accessToken) {
-      fetchGitHubRepos(session.accessToken).then(setRepos).catch(console.error);
-    }
-  }, [session]);
-  console.log(repos);
   return (
     <div className="flex flex-col mx-auto w-[80%] gap-9">
       <div className="mx-auto flex flex-col gap-1 items-center justify-center">
@@ -29,7 +20,10 @@ const Hero = () => {
         </p>
       </div>
       <div className="flex flex-row gap-5 mx-auto">
-        <button className="px-9 py-3 border-[1px] border-[#715DE3] bg-[#715DE3] text-white rounded-md flex items-center gap-3">
+        <button
+          onClick={() => setIsModalOpen(true)}
+          className="group px-9 py-3 border-[1px] border-[#715DE3] bg-[#715DE3] text-white rounded-md flex items-center gap-3"
+        >
           <span>
             <svg
               viewBox="0 0 15 15"
@@ -44,10 +38,10 @@ const Hero = () => {
               ></path>
             </svg>
           </span>
-          <Link href="/check" className="hover:opacity-70">
-            Link Repository
-          </Link>
+          <div className="group-hover:opacity-70">Link Repository</div>
         </button>
+        {isModalOpen && <RepoListModal setIsModalOpen={setIsModalOpen} />}
+
         <button className="px-9 py-3 border-[1px] border-[#FFC700] bg-[white] text-[#FFC700] rounded-md flex gap-3 items-center">
           <span>
             <svg
