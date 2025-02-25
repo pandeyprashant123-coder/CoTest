@@ -14,7 +14,8 @@ const Hero = () => {
   }, [session])
   console.log(repos)
   return (
-    <div className="flex flex-col mx-auto w-[80%] gap-9">
+    <div className="flex flex-col mx-auto w-[80%] gap-9 ">
+      {/* #b03c3c, #510000, #000000 */}
       <div className="mx-auto flex flex-col gap-1 items-center justify-center">
         <h3 className="text-3xl font-bold">
           Test Your
@@ -30,7 +31,7 @@ const Hero = () => {
       </div>
       <div className="flex flex-row gap-5 mx-auto">
         <Link href="/check" className="hover:opacity-70">
-          <button className="px-9 py-3 border-[1px] border-[#715DE3] bg-[#715DE3] text-white rounded-md flex items-center gap-3">
+          <button className="px-9 py-3 border-[1px] border-[#715DE3] bg-[#715DE3]   rounded-md flex items-center gap-3">
             <span>
               <svg
                 viewBox="0 0 15 15"

@@ -41,7 +41,7 @@ export default function codeViewer() {
   }, [file])
 
   return (
-    <div className="p-6 bg-gray-900 text-white min-h-screen">
+    <div className="p-6 bg-gray-900   min-h-screen">
       <h2 className="text-2xl font-bold mb-4">Code Report: {file}</h2>
 
       {codeData ? (

@@ -8,10 +8,10 @@ const Pricing = () => {
       <div className="container mx-auto px-4 md:px-0">
         <div className="text-center mb-16">
           <TopLetter content={"Pricing"} />
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold  mb-4">
             Simple, Transparent Pricing
           </h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
+          <p className="text-gray-100 max-w-2xl mx-auto">
             Choose the plan that's right for your business.
           </p>
 
@@ -94,7 +94,7 @@ const Pricing = () => {
                   : "border border-gray-200 shadow-sm"
               }`}>
               {plan.highlight && (
-                <div className="bg-blue-600 text-white text-center py-2 rounded-t-xl">
+                <div className="bg-blue-600   text-center py-2 rounded-t-xl">
                   Most Popular
                 </div>
               )}
@@ -104,7 +104,7 @@ const Pricing = () => {
                   <span className="text-4xl font-bold">{plan.price}</span>
                   <span className="text-gray-500">{plan.period}</span>
                 </div>
-                <p className="text-gray-600 mb-6">{plan.description}</p>
+                <p className="text-gray-100 mb-6">{plan.description}</p>
                 <ul className="space-y-3 mb-8">
                   {plan.features.map((feature, i) => (
                     <li key={i} className="flex items-start">
@@ -128,7 +128,7 @@ const Pricing = () => {
                   href="#signup"
                   className={`block text-center py-3 rounded-lg ${
                     plan.highlight
-                      ? "bg-blue-600 text-white hover:bg-blue-700"
+                      ? "bg-blue-600   hover:bg-blue-700"
                       : "bg-gray-100 text-gray-800 hover:bg-gray-200"
                   }`}>
                   {plan.cta}

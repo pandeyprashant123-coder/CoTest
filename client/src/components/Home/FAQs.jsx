@@ -13,10 +13,10 @@ const FAQs = () => {
       <div className="container mx-auto px-4 md:px-0">
         <TopLetter content={"FAQs"} />
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold  mb-4">
             Frequently Asked Questions
           </h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
+          <p className="text-gray-100 max-w-2xl mx-auto">
             Find answers to common questions about our platform.
           </p>
         </div>
@@ -83,7 +83,7 @@ const FAQs = () => {
                 </button>
               </h3>
               {openIndex === index && (
-                <p className="text-gray-600">{faq.answer}</p>
+                <p className="text-gray-100">{faq.answer}</p>
               )}
             </div>
           ))}

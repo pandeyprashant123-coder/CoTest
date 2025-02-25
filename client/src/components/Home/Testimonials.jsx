@@ -5,12 +5,12 @@ const Testimonials = () => {
   return (
     <div className="flex flex-col mx-auto w-[80%] gap-9">
       <div className="container mx-auto px-4 md:px-0">
-      <TopLetter content={"Testimonials"} />
+        <TopLetter content={"Testimonials"} />
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold  mb-4">
             What Our Customers Say
           </h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
+          <p className="text-gray-100 max-w-2xl mx-auto">
             Don't just take our word for it. See what our customers have
             achieved with our platform.
           </p>
@@ -50,7 +50,7 @@ const Testimonials = () => {
                   </svg>
                 ))}
               </div>
-              <p className="text-gray-600 mb-6 italic">"{testimonial.quote}"</p>
+              <p className="text-gray-100 mb-6 italic">"{testimonial.quote}"</p>
               <div className="flex items-center">
                 <div className="w-10 h-10 bg-gray-300 rounded-full mr-3"></div>
                 <div>

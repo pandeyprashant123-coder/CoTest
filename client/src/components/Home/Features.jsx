@@ -10,10 +10,10 @@ const Features = () => {
       <div className="container mx-auto px-4 md:px-0">
         <TopLetter content={"Features"} />
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold  mb-4">
             Key Features of Our Platform
           </h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
+          <p className="text-gray-100 max-w-2xl mx-auto">
             Everything you need to manage and grow your business in one powerful
             platform.
           </p>
@@ -69,7 +69,7 @@ const Features = () => {
                 </div>
               </div>
               <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-              <p className="text-gray-600">{feature.description}</p>
+              <p className="text-gray-100">{feature.description}</p>
             </div>
           ))}
         </div>

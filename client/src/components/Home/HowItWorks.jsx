@@ -7,10 +7,10 @@ const HowItWorks = () => {
       <div className="container mx-auto px-4 md:px-0">
         <TopLetter content={"Working"} />
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold  mb-4">
             How It Works
           </h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
+          <p className="text-gray-100 max-w-2xl mx-auto">
             Get started in minutes with our simple three-step process.
           </p>
         </div>
@@ -40,7 +40,7 @@ const HowItWorks = () => {
                   {item.step}
                 </div>
                 <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
-                <p className="text-gray-600">{item.description}</p>
+                <p className="text-gray-100">{item.description}</p>
               </div>
               {index < 2 && (
                 <div className="hidden md:block absolute top-1/2 right-0 transform translate-x-1/2 -translate-y-1/2 text-gray-300">

@@ -13,7 +13,7 @@ export default function Home() {
       {/* <div>
         <ImportRepo />
       </div> */}
-      <div className="mt-20 min-h-[80vh] flex flex-row items-center">
+      <div className="mt-20 min-h-[60vh] flex flex-row items-center ">
         <Hero />
       </div>
       <div className="mt-20 flex flex-row min-h-[50vh] items-center">

@@ -3,7 +3,7 @@ import TopLetter from "../TopLetter"
 
 const CTA = () => {
   return (
-    <div className="flex flex-col mx-auto w-[80%] gap-9 text-black">
+    <div className="flex flex-col mx-auto w-[80%] gap-9">
       <div className="container mx-auto px-4 md:px-0 text-center">
         <TopLetter content={"Contact"} />
         <h2 className="text-3xl md:text-4xl font-bold mb-6">
