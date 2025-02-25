@@ -17,6 +17,7 @@ export default function codeViewer() {
 
   const [codeData, setCodeData] = useState(null);
   const [markers, setMarkers] = useState([]);
+  const [rating, setRating] = useState(0);
 
   console.log(codeData?.message);
   useEffect(() => {
@@ -25,7 +26,9 @@ export default function codeViewer() {
     fetch(`/api/get-report?fileName=${file}`)
       .then((res) => res.json())
       .then((data) => {
-        setCodeData(data);
+        setCodeData(data.code);
+        setRating(data.rating);
+        console.log(data.message);
         setMarkers(
           data.message?.map((error) => ({
             message: error.message,
@@ -48,7 +51,7 @@ export default function codeViewer() {
         <Editor
           height="800px"
           defaultLanguage="python"
-          value={codeData.code}
+          value={codeData}
           options={{ readOnly: true }}
           onMount={(editor, monaco) => {
             monaco.editor.setModelMarkers(editor.getModel(), "owner", markers);

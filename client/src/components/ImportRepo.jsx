@@ -9,6 +9,7 @@ export default function ImportRepo() {
   const [language, setLanguage] = useState("Javascript");
   const [files, setFiles] = useState([]);
   const router = useRouter();
+  const [rating, setRating] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,6 +26,7 @@ export default function ImportRepo() {
       const data = await res.json();
       if (res.ok) {
         setFiles(data.files);
+        setRating(data.majorReport);
         setLoading(false);
       } else {
         setError(data.error);
@@ -73,24 +75,27 @@ export default function ImportRepo() {
       </form>
       {error && <div style={{ color: "red" }}>{error}</div>}
 
-      <div className="p-3 w-[90%] mx-auto border-[1px] rounded-md bg-gray-200">
-        <h2 className="mb-4 font-bold text-xl">Results</h2>
-        <ul>
-          {files.length > 0 ? (
-            files.map((file, index) => (
-              <li
-                key={index}
-                className="p-2 bg-gray-100 rounded mt-1 cursor-pointer hover:bg-gray-700 transition"
-                onClick={() => handleFileClick(file)}
-              >
-                {file}
-              </li>
-            ))
-          ) : (
-            <p>No files found.</p>
-          )}
-        </ul>
-      </div>
+      {files?.length > 0 && (
+        <div className="p-3 w-[90%] mx-auto border-[1px] rounded-md bg-gray-200">
+          <h2 className="mb-4 font-bold text-xl">Results</h2>
+          <ul>
+            {files?.length > 0 ? (
+              files?.map((file, index) => (
+                <li
+                  key={index}
+                  className="p-2 bg-gray-100 rounded mt-1 cursor-pointer hover:bg-gray-700 transition"
+                  onClick={() => handleFileClick(file)}
+                >
+                  {file}
+                  {rating[file]}
+                </li>
+              ))
+            ) : (
+              <p>No files found.</p>
+            )}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }

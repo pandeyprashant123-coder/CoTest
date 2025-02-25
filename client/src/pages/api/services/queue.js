@@ -1,10 +1,11 @@
 import analysisQueue from "../config/bull";
+import extractFileNameFromURL from "./extractFileName";
 import { fetchCodeFromLink } from "./GithubActions";
 import path from "path";
 
 export async function addFilesToQueue(fileUrls, language) {
   for (const fileUrl of fileUrls) {
-    const fileName = path.basename(fileUrl);
+    const fileName = extractFileNameFromURL(fileUrl);
 
     try {
       const code = await fetchCodeFromLink(fileUrl);
