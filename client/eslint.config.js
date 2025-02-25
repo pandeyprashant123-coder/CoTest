@@ -8,14 +8,11 @@ import typescriptPlugin from "@typescript-eslint/eslint-plugin";
 
 export default [
   {
-    files: ["**/*.js", "**/*.ts"],
+    files: ["**/*.js", "**/*.jsx"],
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: "module",
-      globals: {
-        node: true,
-        browser: true,
-      },
+      parser: undefined, // Use default Espree parser for JavaScript
     },
     plugins: {
       security: securityPlugin,
@@ -34,7 +31,7 @@ export default [
     },
   },
   {
-    files: ["**/*.ts"],
+    files: ["**/*.ts", "**/*.tsx"],
     languageOptions: {
       parser: typescriptParser,
       parserOptions: {
@@ -51,7 +48,7 @@ export default [
     },
   },
   {
-    files: ["**/*.js", "**/*.ts"],
+    files: ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx"],
     rules: {
       ...airbnb.rules,
       indent: ["error", 2, { SwitchCase: 1 }],

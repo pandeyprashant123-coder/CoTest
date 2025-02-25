@@ -12,7 +12,7 @@ class UnusedVariablesRule(BaseRule):
 
     def visit_Assign(self, node: ast.Assign) -> None:
         for target in node.targets:
-            if isinstance(target, ast.Name) and not target.id.startswith("_"):
+            if isinstance(target, ast.Name):
                 self.defined_vars[target.id] = target.lineno
         self.generic_visit(node)
 
