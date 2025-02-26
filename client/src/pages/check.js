@@ -1,12 +1,12 @@
-import ImportRepo from "@/components/ImportRepo";
-import React from "react";
-import Head from "next/head";
+import ImportRepo from "@/components/ImportRepo"
+import React from "react"
+import Head from "next/head"
 
 const Check = () => {
   return (
     <>
       <Head>
-        <title>check page</title>
+        <title>Check Page | CoTest</title>
         <meta property="og:description" content="a good chack page" />
       </Head>
       <div className="font-[Inter]">
@@ -15,7 +15,7 @@ const Check = () => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default Check;
+export default Check

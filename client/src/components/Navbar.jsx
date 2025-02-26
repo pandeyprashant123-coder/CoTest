@@ -7,20 +7,32 @@ import LoginButton from "./LoginButton"
 
 const Navbar = () => {
   return (
-    <div className="sticky top-0 flex flex-row justify-between items-center w-[100%] py-4  px-20 mx-auto font-[Inter] text-sm border-b border-b-gray-400 bg-background shadow-sm backdrop-blur-sm ">
+    <div className="sticky top-0 flex flex-row justify-between items-center w-[100%] py-4  px-20 mx-auto font-[Inter] text-sm border-b border-b-gray-400 bg-background shadow-sm backdrop-blur-sm z-50">
       <div className="flex items-center gap-10">
         <Link
           href="/"
           className="flex flex-row gap-2 items-center cursor-pointer">
-          <p className="text-lg font-bold">CoTest</p>
+          <p className="text-xl font-bold ">
+            <span className="text-[#715DE3]">Co</span>Test
+          </p>
         </Link>
         <div className="flex flex-row">
           <ul className="flex flex-row gap-5">
-            <Link href="/">Home</Link>
-            <Link href="/">About</Link>
-            <Link href="/repository">Repository</Link>
-            <Link href="/">Blog</Link>
-            <Link href="/check">Contact</Link>
+            <Link href="/" className="hover:opacity-80">
+              Home
+            </Link>
+            <Link href="/" className="hover:opacity-80">
+              About
+            </Link>
+            <Link href="/repository" className="hover:opacity-80">
+              Repository
+            </Link>
+            <Link href="/" className="hover:opacity-80">
+              Blog
+            </Link>
+            <Link href="/check" className="hover:opacity-80">
+              Contact
+            </Link>
           </ul>
         </div>
       </div>

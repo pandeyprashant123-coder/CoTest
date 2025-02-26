@@ -2,6 +2,7 @@ import { fetchGitHubRepos } from "@/utils/fetchGithubRepos"
 import { useSession } from "next-auth/react"
 import Link from "next/link"
 import React, { useEffect, useState } from "react"
+import GradientComponent from "../GradientComponent"
 
 const Hero = () => {
   const { data: session } = useSession()
@@ -15,19 +16,14 @@ const Hero = () => {
   console.log(repos)
   return (
     <div className="flex flex-col mx-auto w-[80%] gap-9 ">
-      {/* #b03c3c, #510000, #000000 */}
+      <GradientComponent />
       <div className="mx-auto flex flex-col gap-1 items-center justify-center">
-        <h3 className="text-3xl font-bold">
+        <h3 className="text-3xl font-medium">
           Test Your
-          <span className="bg-[#715DE3] bg-opacity-20 rounded-md">
-            {" "}
-            Software{" "}
-          </span>
+          <span className="bg-[#715DE3] mx-1 "> Software </span>
           At CoTest Without Hassle
         </h3>
-        <p className="text-[#645E80]">
-          Link your github repo and let us handle your testing
-        </p>
+        <p className="">Link your github repo and let us handle your testing</p>
       </div>
       <div className="flex flex-row gap-5 mx-auto">
         <Link href="/check" className="hover:opacity-70">
@@ -47,7 +43,7 @@ const Hero = () => {
             Link Repository
           </button>
         </Link>
-        <button className="px-9 py-3 border-[1px] border-[#FFC700] bg-[white] text-[#FFC700] rounded-md flex gap-3 items-center">
+        <button className="px-9 py-3 border-[1px] border-[#b93845] bg-[white] text-[#b93845] rounded-md flex gap-3 items-center">
           <span>
             <svg
               viewBox="0 0 15 15"

@@ -35,12 +35,12 @@ const HowItWorks = () => {
             },
           ].map((item, index) => (
             <div key={index} className="relative">
-              <div className="bg-white p-6 rounded-xl shadow-sm">
+              <div className="bg-white text-black p-6 rounded-xl shadow-sm">
                 <div className="text-blue-600 font-bold text-xl mb-4">
                   {item.step}
                 </div>
-                <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
-                <p className="text-gray-100">{item.description}</p>
+                <h3 className="text-xl font-semibold mb-2 text-black">{item.title}</h3>
+                <p className="text-black">{item.description}</p>
               </div>
               {index < 2 && (
                 <div className="hidden md:block absolute top-1/2 right-0 transform translate-x-1/2 -translate-y-1/2 text-gray-300">

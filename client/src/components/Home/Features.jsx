@@ -3,10 +3,12 @@ import { useSession } from "next-auth/react"
 import Link from "next/link"
 import React, { useEffect, useState } from "react"
 import TopLetter from "../TopLetter"
+import GradientComponent from "../GradientComponent"
 
 const Features = () => {
   return (
     <div className="flex flex-col mx-auto w-[80%] gap-9">
+      <GradientComponent />
       <div className="container mx-auto px-4 md:px-0">
         <TopLetter content={"Features"} />
         <div className="text-center mb-16">
@@ -54,7 +56,7 @@ const Features = () => {
           ].map((feature, index) => (
             <div
               key={index}
-              className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+              className="bg-white text-black p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
               <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
                 <div className="w-6 h-6 text-blue-600">
                   <svg
@@ -68,8 +70,10 @@ const Features = () => {
                   </svg>
                 </div>
               </div>
-              <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-              <p className="text-gray-100">{feature.description}</p>
+              <h3 className="text-xl text-black font-semibold mb-2">
+                {feature.title}
+              </h3>
+              <p className="text-black">{feature.description}</p>
             </div>
           ))}
         </div>

@@ -1,9 +1,11 @@
 import React from "react"
 import TopLetter from "../TopLetter"
+import GradientComponent from "../GradientComponent"
 
 const Testimonials = () => {
   return (
     <div className="flex flex-col mx-auto w-[80%] gap-9">
+      <GradientComponent />
       <div className="container mx-auto px-4 md:px-0">
         <TopLetter content={"Testimonials"} />
         <div className="text-center mb-16">
@@ -37,7 +39,9 @@ const Testimonials = () => {
               role: "Marketing Manager, BrandUp",
             },
           ].map((testimonial, index) => (
-            <div key={index} className="bg-white p-6 rounded-xl shadow-sm">
+            <div
+              key={index}
+              className="bg-white text-black p-6 rounded-xl shadow-sm">
               <div className="mb-4 text-yellow-400 flex">
                 {[...Array(5)].map((_, i) => (
                   <svg
@@ -50,12 +54,14 @@ const Testimonials = () => {
                   </svg>
                 ))}
               </div>
-              <p className="text-gray-100 mb-6 italic">"{testimonial.quote}"</p>
+              <p className=" mb-6 italic text-black">"{testimonial.quote}"</p>
               <div className="flex items-center">
-                <div className="w-10 h-10 bg-gray-300 rounded-full mr-3"></div>
+                <div className="w-10 h-10 bg-gray-300 text-black rounded-full mr-3"></div>
                 <div>
-                  <h4 className="font-semibold">{testimonial.author}</h4>
-                  <p className="text-gray-500 text-sm">{testimonial.role}</p>
+                  <h4 className="font-semibold text-black">
+                    {testimonial.author}
+                  </h4>
+                  <p className="text-black text-sm">{testimonial.role}</p>
                 </div>
               </div>
             </div>

@@ -1,5 +1,6 @@
 import React, { useState } from "react"
 import TopLetter from "../TopLetter"
+import GradientComponent from "../GradientComponent"
 
 const Pricing = () => {
   const [activeTab, setActiveTab] = useState("monthly")
@@ -20,14 +21,14 @@ const Pricing = () => {
               <button
                 onClick={() => setActiveTab("monthly")}
                 className={`px-4 py-2 rounded-md ${
-                  activeTab === "monthly" ? "bg-white shadow-sm" : ""
+                  activeTab === "monthly" ? "bg-white text-black shadow-sm" : ""
                 }`}>
                 Monthly
               </button>
               <button
                 onClick={() => setActiveTab("yearly")}
                 className={`px-4 py-2 rounded-md ${
-                  activeTab === "yearly" ? "bg-white shadow-sm" : ""
+                  activeTab === "yearly" ? "bg-white text-black shadow-sm" : ""
                 }`}>
                 Yearly <span className="text-green-500 text-sm">Save 20%</span>
               </button>
@@ -88,7 +89,7 @@ const Pricing = () => {
           ].map((plan, index) => (
             <div
               key={index}
-              className={`bg-white rounded-xl ${
+              className={`bg-white text-black rounded-xl ${
                 plan.highlight
                   ? "ring-2 ring-blue-600 shadow-lg"
                   : "border border-gray-200 shadow-sm"
