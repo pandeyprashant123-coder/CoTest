@@ -16,12 +16,12 @@ const CTA = () => {
         <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
           <a
             href="#signup"
-            className="border-purple-500 border-2 px-8 py-3 rounded-lg font-semibold ">
+            className="border-purple-500 hover:ring-4  hover:ring-purple-500 hover:ring-opacity-40  duration-300 border-2 px-8 py-3 rounded-lg font-semibold ">
             Get Started Free
           </a>
           <a
             href="#demo"
-            className="border-2 border-yellow-500  px-8 py-3 rounded-lg font-semibold ">
+            className="border-2 border-yellow-500 hover:ring-4  hover:ring-yellow-500 hover:ring-opacity-40  duration-300  px-8 py-3 rounded-lg font-semibold ">
             Schedule a Demo
           </a>
         </div>

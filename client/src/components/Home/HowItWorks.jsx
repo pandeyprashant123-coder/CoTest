@@ -7,9 +7,7 @@ const HowItWorks = () => {
       <div className="container mx-auto px-4 md:px-0">
         <TopLetter content={"Working"} />
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold  mb-4">
-            How It Works
-          </h2>
+          <h2 className="text-3xl md:text-4xl font-bold  mb-4">How It Works</h2>
           <p className="text-gray-100 max-w-2xl mx-auto">
             Get started in minutes with our simple three-step process.
           </p>
@@ -19,19 +17,18 @@ const HowItWorks = () => {
           {[
             {
               step: "01",
-              title: "Create an account",
-              description: "Sign up for free and complete your profile setup.",
+              title: "Sign in with Github",
+              description: "Sign in for free with your github.",
             },
             {
               step: "02",
-              title: "Configure your workspace",
-              description: "Customize your dashboard and invite team members.",
+              title: "Select repository",
+              description: "Select your required repository for analysis.",
             },
             {
               step: "03",
-              title: "Start growing your business",
-              description:
-                "Utilize our tools to streamline operations and boost revenue.",
+              title: "Start checking",
+              description: "Start your analysis and view the results.",
             },
           ].map((item, index) => (
             <div key={index} className="relative">
@@ -39,7 +36,9 @@ const HowItWorks = () => {
                 <div className="text-blue-600 font-bold text-xl mb-4">
                   {item.step}
                 </div>
-                <h3 className="text-xl font-semibold mb-2 text-black">{item.title}</h3>
+                <h3 className="text-xl font-semibold mb-2 text-black">
+                  {item.title}
+                </h3>
                 <p className="text-black">{item.description}</p>
               </div>
               {index < 2 && (

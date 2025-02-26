@@ -18,16 +18,18 @@ const Hero = () => {
     <div className="flex flex-col mx-auto w-[80%] gap-9 ">
       <GradientComponent />
       <div className="mx-auto flex flex-col gap-1 items-center justify-center">
-        <h3 className="text-3xl font-medium">
+        <h3 className="text-3xl font-medium text-center">
           Test Your
           <span className="bg-[#715DE3] mx-1 "> Software </span>
           At CoTest Without Hassle
         </h3>
-        <p className="">Link your github repo and let us handle your testing</p>
+        <p className="text-gray-200">
+          Link your github repo and let us handle your testing
+        </p>
       </div>
       <div className="flex flex-row gap-5 mx-auto">
-        <Link href="/check" className="hover:opacity-70">
-          <button className="px-9 py-3 border-[1px] border-[#715DE3] bg-[#715DE3]   rounded-md flex items-center gap-3">
+        <Link href="/check" className="">
+          <button className=" border-2 border-purple-500 hover:ring-4  hover:ring-purple-500 hover:ring-opacity-40  duration-300  px-8 py-3 rounded-lg font-semibold    flex items-center gap-3 text-gray-200">
             <span>
               <svg
                 viewBox="0 0 15 15"
@@ -43,7 +45,7 @@ const Hero = () => {
             Link Repository
           </button>
         </Link>
-        <button className="px-9 py-3 border-[1px] border-[#b93845] bg-[white] text-[#b93845] rounded-md flex gap-3 items-center">
+        <button className="border-2 border-red-500 hover:ring-4  hover:ring-red-500 hover:ring-opacity-40  duration-300  px-8 py-3 rounded-lg font-semibold  flex gap-3 items-center text-gray-200">
           <span>
             <svg
               viewBox="0 0 15 15"
@@ -56,7 +58,7 @@ const Hero = () => {
                 fill="currentColor"></path>
             </svg>
           </span>
-          <span className="hover:opacity-70">Demo Video</span>
+          <span className="">Demo Video</span>
         </button>
       </div>
     </div>

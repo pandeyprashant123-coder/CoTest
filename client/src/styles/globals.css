@@ -7,6 +7,8 @@ body{
     @apply  text-white
 }
 
+
+
 .gradient-hero {
     border-image-slice: 1;
     border-image-source: radial-gradient(

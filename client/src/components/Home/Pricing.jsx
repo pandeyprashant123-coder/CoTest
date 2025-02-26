@@ -21,14 +21,18 @@ const Pricing = () => {
               <button
                 onClick={() => setActiveTab("monthly")}
                 className={`px-4 py-2 rounded-md ${
-                  activeTab === "monthly" ? "bg-white text-black shadow-sm" : ""
+                  activeTab === "monthly"
+                    ? "bg-white text-black shadow-sm"
+                    : "text-black"
                 }`}>
                 Monthly
               </button>
               <button
                 onClick={() => setActiveTab("yearly")}
                 className={`px-4 py-2 rounded-md ${
-                  activeTab === "yearly" ? "bg-white text-black shadow-sm" : ""
+                  activeTab === "yearly"
+                    ? "bg-white text-black shadow-sm"
+                    : "text-black"
                 }`}>
                 Yearly <span className="text-green-500 text-sm">Save 20%</span>
               </button>
@@ -92,7 +96,7 @@ const Pricing = () => {
               className={`bg-white text-black rounded-xl ${
                 plan.highlight
                   ? "ring-2 ring-blue-600 shadow-lg"
-                  : "border border-gray-200 shadow-sm"
+                  : "border border-gray-500 shadow-sm"
               }`}>
               {plan.highlight && (
                 <div className="bg-blue-600   text-center py-2 rounded-t-xl">
@@ -103,9 +107,9 @@ const Pricing = () => {
                 <h3 className="text-2xl font-bold mb-4">{plan.name}</h3>
                 <div className="mb-4">
                   <span className="text-4xl font-bold">{plan.price}</span>
-                  <span className="text-gray-500">{plan.period}</span>
+                  <span className="text-gray-900">{plan.period}</span>
                 </div>
-                <p className="text-gray-100 mb-6">{plan.description}</p>
+                <p className="text-gray-700 mb-6">{plan.description}</p>
                 <ul className="space-y-3 mb-8">
                   {plan.features.map((feature, i) => (
                     <li key={i} className="flex items-start">
@@ -129,8 +133,8 @@ const Pricing = () => {
                   href="#signup"
                   className={`block text-center py-3 rounded-lg ${
                     plan.highlight
-                      ? "bg-blue-600   hover:bg-blue-700"
-                      : "bg-gray-100 text-gray-800 hover:bg-gray-200"
+                      ? "bg-blue-600   hover:bg-blue-700 text-blue-100"
+                      : "bg-gray-300 text-gray-800 hover:bg-gray-400"
                   }`}>
                   {plan.cta}
                 </a>
