@@ -26,11 +26,19 @@ redis-server
 brew install redis  
 redis-server
 ```
+# Python
 
-## To Run Cotest_python(req)
-Requiremets: Python, FastApi
 ```
-pip install -r 
+pip install -r cotest_python/requirements.txt
+```
+
+## Testing Python code
+```
+python -m cotest_python.reviewer test_file
+```
+
+## Python Backend deployment
+```
 python -m cotest_python.api
 ```
 ### TO RUN TEST FILE (opt)

@@ -14,6 +14,7 @@ export default function ImportRepo() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [flag, setFlag] = useState(0);
   const router = useRouter();
+  const [rating, setRating] = useState(null);
 
   useEffect(() => {
     const savedRepoUrl = localStorage.getItem("selectedRepoUrl");
@@ -42,6 +43,7 @@ export default function ImportRepo() {
       const data = await res.json();
       if (res.ok) {
         setFiles(data.files);
+        setRating(data.majorReport);
         setLoading(false);
       } else {
         setError(data.error);
@@ -92,43 +94,49 @@ export default function ImportRepo() {
           <select
             value={language}
             onChange={(e) => setLanguage(e.target.value)}
-            className="border-[1px] border-black"
+            className="border-[1px] border-black text-black outline-none px-2"
           >
             <option value="Javascript">Javascript</option>
             <option value="Python">Python</option>
           </select>
         </div>
-        <button type="submit" className="p-2 w-max border-[1px] border-black">
+        <button type="submit" className="p-2 w-max border-[1px] border-black ">
           {loading ? `Loading...` : `Check Files`}
         </button>
         {/* <p>{result}</p> */}
       </div>
       {error && <div style={{ color: "red" }}>{error}</div>}
 
-      <div className="p-3 w-[90%] mx-auto border-[1px] rounded-md bg-gray-200">
-        <h2 className="mb-4 font-bold text-xl">Results</h2>
-        {loading ? (
-          <div>Loading...</div>
-        ) : (
-          <>
-            <ul>
-              {files.length > 0 ? (
-                files.map((file, index) => (
+
+      {files?.length > 0 && (
+        <div className="px-3 w-[90%] mx-auto border-[1px]  border-gray-200 bg-black my-9">
+          <h2 className="mb-4 font-bold text-xl text-center">Results</h2>
+          <ul>
+            {files?.length > 0 ? (
+              files?.map((file, index) => {
+                const textColor =
+                  Number(rating[file] / 10).toFixed(0) * 100 === 1000
+                    ? 900
+                    : (Number(rating[file] / 10).toFixed(0) - 5) * 100;
+                console.log(textColor);
+                return (
                   <li
                     key={index}
-                    className="p-2 bg-gray-100 rounded mt-1 cursor-pointer hover:bg-gray-700 transition"
+                    className={`p-2 bg-green-${textColor}  border-gray-100  mt-1 cursor-pointer hover:bg-gray-700 transition flex justify-between`}
                     onClick={() => handleFileClick(file)}
                   >
-                    {file}
+                    <p>{file}</p>
+                    <p>{Number(rating[file])}%</p>
                   </li>
-                ))
-              ) : (
-                <p>No files found.</p>
-              )}
-            </ul>
-          </>
-        )}
-      </div>
+                );
+              })
+            ) : (
+              <p>No files found.</p>
+            )}
+          </ul>
+        </div>
+      )}
+
     </div>
   );
 }
