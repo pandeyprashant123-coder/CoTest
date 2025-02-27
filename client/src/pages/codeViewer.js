@@ -1,51 +1,74 @@
-import { useEffect, useState } from "react"
-import { useRouter } from "next/router"
-import dynamic from "next/dynamic"
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import dynamic from "next/dynamic";
+import { set } from "zod";
 
-// Import Monaco dynamically (avoiding SSR issues)
-const Editor = dynamic(() => import("@monaco-editor/react"), { ssr: false })
+const Editor = dynamic(() => import("@monaco-editor/react"), { ssr: false });
 
 const severityMap = {
-  2: 1, // Info (Blue)
-  4: 4, // Warning (Yellow)
-  8: 8, // Error (Red)
-}
+  1: 4,
+  2: 8, // Error
+};
+const severitydecoration = {
+  4: { color: "blue", className: "info-marker" }, // Info
+  8: { color: "red", className: "error-marker" }, // Error
+};
 
-export default function codeViewer() {
-  const router = useRouter()
-  const { file } = router.query // Get the file name from the URL
+export default function CodeViewer() {
+  const router = useRouter();
+  const { file } = router.query;
 
   const [codeData, setCodeData] = useState(null);
   const [markers, setMarkers] = useState([]);
   const [rating, setRating] = useState(0);
+  const [severityList, setSeverityList] = useState([]);
 
-  console.log(codeData?.message)
   useEffect(() => {
-    if (!file) return
+    if (!file) return;
 
     fetch(`/api/get-report?fileName=${file}`)
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        return res.json();
+      })
       .then((data) => {
         setCodeData(data.code);
         setRating(data.rating);
         console.log(data.message);
+        setSeverityList((prevList) => {
+          const newSeverities =
+            data.message?.map(({ severity }) => {
+              const newSeverity = severityMap[severity];
+              console.log(newSeverity);
+              return newSeverity;
+            }) || [];
+          return [...prevList, ...newSeverities];
+        });
+        console.log(severityList);
         setMarkers(
-          data.message?.map((error) => ({
-            message: error.message,
-            severity: severityMap[error.severity] || 1,
-            startLineNumber: error.line,
-            startColumn: error.column,
-            endLineNumber: error.line,
-            endColumn: error.column + 1,
-          }))
-        )
+          data.message?.map((error) => {
+            const marker = {
+              message: error.message,
+              severity: 1,
+              startLineNumber: error.line,
+              startColumn: error.column || 1,
+              endLineNumber: error.line,
+              endColumn: error.endColumn || 3,
+            };
+            console.log("Marker:", marker);
+            return marker;
+          }) || []
+        );
       })
-      .catch((error) => console.error("Error fetching code analysis:", error))
-  }, [file])
+      .catch((error) => {
+        console.error("Error fetching code analysis:", error);
+        setCodeData("Failed to load code.");
+      });
+  }, [file]);
 
   return (
-    <div className="p-6 bg-gray-900   min-h-screen">
-      <h2 className="text-2xl font-bold mb-4">Code Report: {file}</h2>
+    <div className="p-6 bg-gray-900 text-white min-h-screen">
+      <h2 className="text-2xl font-bold mb-4">Code Report: {file || "N/A"}</h2>
 
       {codeData ? (
         <Editor
@@ -53,13 +76,31 @@ export default function codeViewer() {
           defaultLanguage="python"
           value={codeData}
           options={{ readOnly: true }}
+          loading={<p>Loading editor...</p>}
           onMount={(editor, monaco) => {
-            monaco.editor.setModelMarkers(editor.getModel(), "owner", markers)
+            const model = editor.getModel();
+            if (model) {
+              monaco.editor.setModelMarkers(model, "owner", markers);
+              const decorations = markers.map((marker, index) => ({
+                range: new monaco.Range(
+                  marker.startLineNumber,
+                  marker.startColumn,
+                  marker.endLineNumber,
+                  marker.endColumn
+                ),
+                options: {
+                  inlineClassName:
+                    severitydecoration[severityList[index]]?.className ||
+                    "default-marker",
+                },
+              }));
+              editor.createDecorationsCollection(decorations);
+            }
           }}
         />
       ) : (
         <p>Loading code...</p>
       )}
     </div>
-  )
+  );
 }
