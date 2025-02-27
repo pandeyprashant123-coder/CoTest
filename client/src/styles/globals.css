@@ -2,7 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+body{
+    background: black;
+    @apply  text-white
+}
 
+
+
+.gradient-hero {
+    border-image-slice: 1;
+    border-image-source: radial-gradient(
+      circle at 50% 0%,
+      rgba(255, 255, 255, 0.5) 0%,
+      rgba(252, 70, 107, 0) 100%
+    );
+  }
 .info-marker {
   background-color: rgba(0, 0, 255, 0.2); /* Blue highlight */
 }

@@ -7,14 +7,14 @@ export default function LoginButton() {
     return (
       <>
         Signed in as {session.user.name} <br />
-        <button onClick={() => signOut()}>Sign out</button>
+        <button onClick={() => signOut()} className="hover:opacity-80">Sign out</button>
       </>
     );
   }
   return (
     <>
       Not signed in <br />
-      <button onClick={() => signIn()}>Sign in</button>
+      <button onClick={() => signIn()} className="hover:opacity-80">Sign in</button>
     </>
   );
 }
