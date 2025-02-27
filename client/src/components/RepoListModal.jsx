@@ -31,7 +31,7 @@ const RepoListModal = ({ setIsModalOpen, flag = 0, setFlag = () => {} }) => {
   console.log(repos);
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white p-5 rounded-md shadow-lg w-[50%]">
+      <div className="bg-black p-5 rounded-md shadow-lg w-[50%]">
         <h2 className="text-xl font-bold mb-4">Select a Repository</h2>
 
         {repos.length > 0 ? (
