@@ -1,9 +1,11 @@
+
 import { fetchGitHubRepos } from "@/utils/fetchGithubRepos"
 import { useSession } from "next-auth/react"
 import Link from "next/link"
 import React, { useEffect, useState } from "react"
 import GradientComponent from "../GradientComponent"
-
+const [isModalOpen, setIsModalOpen] = useState(false);
+  import RepoListModal from "../RepoListModal";
 const Hero = () => {
   const { data: session } = useSession()
   const [repos, setRepos] = useState([])
@@ -14,6 +16,7 @@ const Hero = () => {
     }
   }, [session])
   console.log(repos)
+
   return (
     <div className="flex flex-col mx-auto w-[80%] gap-9 ">
       <GradientComponent />
@@ -28,8 +31,8 @@ const Hero = () => {
         </p>
       </div>
       <div className="flex flex-row gap-5 mx-auto">
-        <Link href="/check" className="">
-          <button className=" border-2 border-purple-500 hover:ring-4  hover:ring-purple-500 hover:ring-opacity-40  duration-300  px-8 py-3 rounded-lg font-semibold    flex items-center gap-3 text-gray-200">
+
+          <button onClick={() => setIsModalOpen(true)} className=" border-2 border-purple-500 hover:ring-4  hover:ring-purple-500 hover:ring-opacity-40  duration-300  px-8 py-3 rounded-lg font-semibold    flex items-center gap-3 text-gray-200">
             <span>
               <svg
                 viewBox="0 0 15 15"
@@ -44,8 +47,9 @@ const Hero = () => {
             </span>
             Link Repository
           </button>
-        </Link>
+{isModalOpen && <RepoListModal setIsModalOpen={setIsModalOpen} />}
         <button className="border-2 border-red-500 hover:ring-4  hover:ring-red-500 hover:ring-opacity-40  duration-300  px-8 py-3 rounded-lg font-semibold  flex gap-3 items-center text-gray-200">
+
           <span>
             <svg
               viewBox="0 0 15 15"
