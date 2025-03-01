@@ -23,7 +23,6 @@ const RepoListModal = ({ setIsModalOpen, flag = 0, setFlag = () => {} }) => {
 
   const handleSelectRepo = (repoUrl) => {
     localStorage.setItem("selectedRepoUrl", repoUrl);
-    alert(`Repository URL saved: ${repoUrl}`);
     setIsModalOpen(false);
     setFlag(flag + 1);
     navigate.push("/check");

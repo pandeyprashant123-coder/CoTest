@@ -17,8 +17,14 @@ body{
       rgba(252, 70, 107, 0) 100%
     );
   }
-.info-marker {
+.low-marker {
+  background-color: rgba(247, 239, 29, 0.2); /* Blue highlight */
+}
+.medium-marker {
   background-color: rgba(0, 0, 255, 0.2); /* Blue highlight */
+}
+.warning-marker {
+  background-color: rgba(255, 115, 0, 0.2); /* Blue highlight */
 }
 .error-marker {
   background-color: rgba(255, 0, 0, 0.2); /* Red highlight */

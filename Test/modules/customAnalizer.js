@@ -35,6 +35,7 @@ function analyzeCode(code) {
             column: 0,
           };
           const { startPosition, endPosition } = capture.node;
+          console.log(startPosition,"hell",endPosition)
           message.severity = rule.severity === "warning" ? 1 : 2;
           message.message = rule.description;
           message.line = startPosition.row + 1;

@@ -2,7 +2,7 @@ let messages = [];
 function traverse(node, parentFunction, parentArgs) {
   if (!node) return;
   let message = {
-    severity: 2,
+    severity: 8,
     message: "Infinite Resursin detected",
     line: 0,
     column: 0,

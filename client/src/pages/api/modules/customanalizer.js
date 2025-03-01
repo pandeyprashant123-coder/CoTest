@@ -6,6 +6,7 @@ import chalk from "chalk";
 import detectDeeplyNestedLoops from "./nestedloop.js";
 import detectInfiniteRecursion from "./infiniteRecursion.js";
 import detectHardcodedCredentials from "./detectCredentials.js";
+import { warn } from "console";
 
 // Initialize the parser
 const parser = new Parser();
@@ -16,6 +17,14 @@ const rules = JSON.parse(
 
 let totalMatches = 0;
 let totalErrors = 0;
+const errorSeverity = {
+  warning: 4,
+  info: 1,
+  low: 2,
+  high: 8,
+  mendium: 4,
+  critical: 8,
+};
 
 function analyzeCode(code, fileName) {
   const tree = parser.parse(code);
@@ -35,8 +44,7 @@ function analyzeCode(code, fileName) {
             column: 0,
           };
           const { startPosition, endPosition } = capture.node;
-          message.severity =
-            rule.severity === "warning" || "info" || "low" ? 1 : 2;
+          message.severity = errorSeverity[rule.severity];
           message.message = rule.description;
           message.line = startPosition.row + 1;
           message.column = startPosition.column + 1;
