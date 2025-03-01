@@ -1,4 +1,3 @@
-// eslint.config.js
 import js from "@eslint/js";
 import airbnb from "eslint-config-airbnb-base";
 import securityPlugin from "eslint-plugin-security";
@@ -8,11 +7,11 @@ import typescriptPlugin from "@typescript-eslint/eslint-plugin";
 
 export default [
   {
-    files: ["**/*.js", "**/*.jsx"],
+    files: ["**/*.js", "**/*.jsx", "**/*.cjs"], // Include .cjs files
     languageOptions: {
       ecmaVersion: 2022,
-      sourceType: "module",
-      parser: undefined, // Use default Espree parser for JavaScript
+      sourceType: "module", // Use "script" for CommonJS if needed
+      parser: undefined, // Default Espree parser for JavaScript
     },
     plugins: {
       security: securityPlugin,
@@ -28,6 +27,17 @@ export default [
       "security/detect-object-injection": "error",
       "no-await-in-loop": "error",
       "no-promise-executor-return": "error",
+    },
+  },
+  {
+    files: ["**/*.cjs"], // Separate rules for CommonJS files
+    languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: "script", // CommonJS mode
+    },
+    rules: {
+      "no-var": "off", // Allow var in old-style code
+      "prefer-const": "warn", // Encourage modern syntax
     },
   },
   {
@@ -48,7 +58,7 @@ export default [
     },
   },
   {
-    files: ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx"],
+    files: ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx", "**/*.cjs"],
     rules: {
       ...airbnb.rules,
       indent: ["error", 2, { SwitchCase: 1 }],

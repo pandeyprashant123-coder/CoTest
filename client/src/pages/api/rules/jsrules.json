@@ -112,7 +112,7 @@
   },
   {
     "name": "Add Braces to Control Statements",
-    "query": "(if_statement consequence: (_) @consequence)",
+    "query": "(if_statement consequence: (expression_statement) @consequence)",
     "description": "Ensure all control statements use braces to define their blocks, enhancing readability and preventing errors.",
     "severity": "warning"
   },

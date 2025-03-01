@@ -5,12 +5,10 @@ import { set } from "zod";
 
 const Editor = dynamic(() => import("@monaco-editor/react"), { ssr: false });
 
-const severityMap = {
-  1: 4,
-  2: 8, // Error
-};
 const severitydecoration = {
-  4: { color: "blue", className: "info-marker" }, // Info
+  1: { color: "yellow", className: "low-marker" }, // Info
+  2: { color: "blue", className: "medium-marker" }, // Info
+  4: { color: "orange", className: "warning-marker" }, // Info
   8: { color: "red", className: "error-marker" }, // Error
 };
 
@@ -34,12 +32,11 @@ export default function CodeViewer() {
       .then((data) => {
         setCodeData(data.code);
         setRating(data.rating);
-        console.log(data.message);
+        console.log(JSON.stringify(data.message));
         setSeverityList((prevList) => {
           const newSeverities =
             data.message?.map(({ severity }) => {
-              const newSeverity = severityMap[severity];
-              console.log(newSeverity);
+              const newSeverity = severity;
               return newSeverity;
             }) || [];
           return [...prevList, ...newSeverities];
@@ -51,7 +48,7 @@ export default function CodeViewer() {
               message: error.message,
               severity: 1,
               startLineNumber: error.line,
-              startColumn: error.column || 1,
+              startColumn: error.column,
               endLineNumber: error.line,
               endColumn: error.endColumn || 3,
             };

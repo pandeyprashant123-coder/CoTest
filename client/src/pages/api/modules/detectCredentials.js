@@ -21,7 +21,7 @@ function traverse(node) {
     return;
   }
   let message = {
-    severity: 2,
+    severity: 8,
     message: "Hard coded credentials detected",
     line: 0,
     column: 0,

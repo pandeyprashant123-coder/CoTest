@@ -2,6 +2,19 @@ import { useRouter } from "next/router";
 import React, { useState, useEffect } from "react";
 import RepoListModal from "./RepoListModal";
 
+const ratingClasses = {
+  1: "bg-red-700",
+  2: "bg-red-600",
+  3: "bg-red-500",
+  4: "bg-red-400",
+  5: "bg-red-300",
+  6: "bg-red-200",
+  7: "bg-red-100",
+  8: "bg-red-50",
+  9: "bg-green-900",
+  10: "bg-green-950",
+};
+
 export default function ImportRepo() {
   const [link, setLink] = useState(
     localStorage.getItem("selectedRepoUrl") || ""
@@ -107,22 +120,20 @@ export default function ImportRepo() {
       </div>
       {error && <div style={{ color: "red" }}>{error}</div>}
 
-
       {files?.length > 0 && (
-        <div className="px-3 w-[90%] mx-auto border-[1px]  border-gray-200 bg-black my-9">
+        <div
+          className={`px-3 w-[90%] mx-auto border-[1px]  border-gray-200 bg-black my-9`}
+        >
           <h2 className="mb-4 font-bold text-xl text-center">Results</h2>
           <ul>
             {files?.length > 0 ? (
               files?.map((file, index) => {
-                const textColor =
-                  Number(rating[file] / 10).toFixed(0) * 100 === 1000
-                    ? 900
-                    : (Number(rating[file] / 10).toFixed(0) - 5) * 100;
+                const textColor = Math.trunc(rating[file] / 10);
                 console.log(textColor);
                 return (
                   <li
                     key={index}
-                    className={`p-2 bg-green-${textColor}  border-gray-100  mt-1 cursor-pointer hover:bg-gray-700 transition flex justify-between`}
+                    className={`p-2 ${ratingClasses[textColor]}    border-gray-100  mt-1 cursor-pointer hover:bg-gray-700 transition flex justify-between`}
                     onClick={() => handleFileClick(file)}
                   >
                     <p>{file}</p>
@@ -136,7 +147,6 @@ export default function ImportRepo() {
           </ul>
         </div>
       )}
-
     </div>
   );
 }
