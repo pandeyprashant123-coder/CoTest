@@ -32,7 +32,7 @@ export default function CodeViewer() {
       .then((data) => {
         setCodeData(data.code);
         setRating(data.rating);
-        console.log(JSON.stringify(data.message));
+        console.log(data.message);
         setSeverityList((prevList) => {
           const newSeverities =
             data.message?.map(({ severity }) => {
