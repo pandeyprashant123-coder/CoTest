@@ -1,49 +1,45 @@
-import ImportRepo from "@/components/ImportRepo"
-import React from "react"
-import Head from "next/head"
-import { signIn, useSession } from "next-auth/react"
-import { Kanit } from "next/font/google"
-import { useEffect } from "react"
-import { useRouter } from "next/router"
-import { signin } from "@/utils/auth"
+import ImportRepo from "@/components/ImportRepo";
+import React from "react";
+import Head from "next/head";
+import { signIn, useSession } from "next-auth/react";
+import { Kanit } from "next/font/google";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
+import { signin } from "@/utils/auth";
 
 const kanit = Kanit({
   weight: ["100", "200", "300", "500", "600", "700", "800", "400"],
   subsets: ["latin"],
-})
+});
 
 const Check = () => {
-  const { data: session, status } = useSession()
+  const { data: session, status } = useSession();
 
-  const router = useRouter()
+  const router = useRouter();
 
   useEffect(() => {
     if (status === "unauthenticated") {
-      signIn("github", { callbackUrl: "/repository" })
+      signIn("github", { callbackUrl: "/repository" });
     }
-  }, [status, router])
+  }, [status, router]);
 
   if (status === "loading") {
-    return <p>Loading...</p>
+    return <p>Loading...</p>;
   }
 
+  return (
+    <>
+      <Head>
+        <title>Check Page | CoTest</title>
+        <meta property="og:description" content="a good chack page" />
+      </Head>
+      <div className={`${kanit.className} min-h-[65vh] `}>
+        <div>
+          <ImportRepo />
+        </div>
+      </div>
+    </>
+  );
+};
 
-
-  router.push("/repository")
-
-  // return (
-  //   <>
-  //     <Head>
-  //       <title>Check Page | CoTest</title>
-  //       <meta property="og:description" content="a good chack page" />
-  //     </Head>
-  //     <div className={`${kanit.className} min-h-[65vh] `}>
-  //       <div>
-  //         <ImportRepo />
-  //       </div>
-  //     </div>
-  //   </>
-  // )
-}
-
-export default Check
+export default Check;
