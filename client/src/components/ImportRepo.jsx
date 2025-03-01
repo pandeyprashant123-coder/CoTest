@@ -122,7 +122,7 @@ export default function ImportRepo() {
 
       {files?.length > 0 && (
         <div
-          className={`px-3 w-[90%] mx-auto border-[1px]  border-gray-200 bg-black my-9`}
+          className={`px-3 w-[90%] mx-auto border-[1px]  border-gray-200 bg-black my-9 overflow-y-auto`}
         >
           <h2 className="mb-4 font-bold text-xl text-center">Results</h2>
           <ul>

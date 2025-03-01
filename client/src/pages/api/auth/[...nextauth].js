@@ -1,9 +1,9 @@
 import NextAuth from "next-auth";
 import GithubProvider from "next-auth/providers/github";
-export const authOptions = {
+export default NextAuth.default({
   // Configure one or more authentication providers
   providers: [
-    GithubProvider({
+    GithubProvider.default({
       clientId: process.env.GITHUB_ID,
       clientSecret: process.env.GITHUB_SECRET,
       authorization: {
@@ -26,5 +26,5 @@ export const authOptions = {
       return session;
     },
   },
-};
-export default NextAuth(authOptions);
+});
+// export default NextAuth(authOptions);
