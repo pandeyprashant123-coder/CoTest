@@ -1,6 +1,6 @@
 import { signIn, signOut } from "next-auth/react";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/pages/api/auth/authoptions";
+import { authOptions } from "@/pages/api/auth/authOptions";
 
 export const signin = async () => {
   await signIn("github", { callbackUrl: "/repository" });
