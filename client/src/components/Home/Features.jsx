@@ -1,7 +1,5 @@
-import { fetchGitHubRepos } from "@/utils/fetchGithubRepos"
-import { useSession } from "next-auth/react"
-import Link from "next/link"
-import React, { useEffect, useState } from "react"
+
+import React from "react"
 import TopLetter from "../TopLetter"
 import GradientComponent from "../GradientComponent"
 

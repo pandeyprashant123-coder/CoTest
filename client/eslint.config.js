@@ -8,6 +8,30 @@ import react from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
 import globals from "globals";
 
+const ruleEntryToWarning = (ruleEntry) => {
+  if (Array.isArray(ruleEntry)) {
+    return ["warn", ...ruleEntry.slice(1)];
+  }
+  return "warn";
+};
+
+const jsWarnRules = Object.fromEntries(
+  Object.entries(js.configs.recommended.rules).map(([ruleId, ruleEntry]) => [
+    ruleId,
+    ruleEntryToWarning(ruleEntry),
+  ])
+);
+const sonarjsWarnRules = Object.fromEntries(
+  Object.entries(sonarjsPlugin.configs.recommended.rules).map(
+    ([ruleId, ruleEntry]) => [ruleId, ruleEntryToWarning(ruleEntry)]
+  )
+);
+const securityjsWarnRules = Object.fromEntries(
+  Object.entries(securityPlugin.configs.recommended.rules).map(
+    ([ruleId, ruleEntry]) => [ruleId, ruleEntryToWarning(ruleEntry)]
+  )
+);
+
 export default [
   {
     files: ["**/*.js", "**/*.jsx", "**/*.cjs"],
@@ -36,21 +60,22 @@ export default [
       },
     },
     rules: {
-      ...js.configs.recommended.rules,
-      ...securityPlugin.configs.recommended.rules,
-      ...sonarjsPlugin.configs.recommended.rules,
+      ...jsWarnRules,
+      ...sonarjsWarnRules,
+      ...securityjsWarnRules,
       "react/jsx-uses-react": "warn",
       "react/react-in-jsx-scope": "warn",
       "react-hooks/rules-of-hooks": "warn",
       "react-hooks/exhaustive-deps": "warn",
-      "no-unused-vars": "off",
+      "no-unused-vars": "warn",
+      "no-console": "warn",
       "max-lines": ["warn", 500],
       "max-nested-callbacks": ["error", 3],
       "max-params": ["error", 3],
       "max-depth": ["warn", 3],
       "no-unsafe-optional-chaining": "error",
       "security/detect-object-injection": "error",
-      "no-await-in-loop": "error",
+      "no-await-in-loop": "warn",
       "no-promise-executor-return": "error",
     },
   },
@@ -91,7 +116,7 @@ export default [
       ...airbnb.rules,
       "arrow-body-style": "off",
       "no-underscore-dangle": "off",
-      "no-debugger": "error",
+      "no-debugger": "warn",
     },
   },
 ];

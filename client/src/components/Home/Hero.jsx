@@ -1,6 +1,5 @@
 import { fetchGitHubRepos } from "@/utils/fetchGithubRepos";
 import { useSession } from "next-auth/react";
-import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import GradientComponent from "../GradientComponent";
 
