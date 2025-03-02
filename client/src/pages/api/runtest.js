@@ -68,10 +68,7 @@ analysisQueue.process(async (job) => {
     if (language === "Javascript") {
       message = await test(code);
     } else if (language === "Python") {
-      const response = await axios.post(
-        "http://127.0.0.1:8001/review_python_code",
-        { code }
-      );
+      const response = await axios.post(process.env.PYHON_API_URL, { code });
       message = response.data;
     }
     const rating = calculatePerformanceRating(message);

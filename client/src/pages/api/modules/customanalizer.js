@@ -1,6 +1,6 @@
 import Parser from "tree-sitter";
 import JavaScript from "tree-sitter-javascript";
-import fs from "fs";
+import rules from "../rules/jsrules.json";
 
 import detectDeeplyNestedLoops from "./nestedloop.js";
 import detectInfiniteRecursion from "./infiniteRecursion.js";
@@ -9,10 +9,6 @@ import detectHardcodedCredentials from "./detectCredentials.js";
 // Initialize the parser
 const parser = new Parser();
 parser.setLanguage(JavaScript);
-const rules = JSON.parse(
-  fs.readFileSync("src/pages/api/rules/jsrules.json", "utf8")
-);
-
 let totalMatches = 0;
 let totalErrors = 0;
 const errorSeverity = {
