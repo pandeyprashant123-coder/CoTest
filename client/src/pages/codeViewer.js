@@ -37,9 +37,8 @@ export default function CodeViewer() {
         setLanguage(data.language);
         setSeverityList((prevList) => {
           const newSeverities =
-            data.message?.map(({ severity }) => {
-              const newSeverity = severity;
-              return newSeverity;
+            data.message?.map(message => {
+              return message.stringSeverity ?message.stringSeverity: message.severity;
             }) || [];
           return [...prevList, ...newSeverities];
         });
