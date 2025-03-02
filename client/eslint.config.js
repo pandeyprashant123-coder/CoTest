@@ -1,27 +1,34 @@
 import js from "@eslint/js";
-import next from "eslint-config-next";
 import airbnb from "eslint-config-airbnb-base";
 import securityPlugin from "eslint-plugin-security";
 import sonarjsPlugin from "eslint-plugin-sonarjs";
 import typescriptParser from "@typescript-eslint/parser";
 import typescriptPlugin from "@typescript-eslint/eslint-plugin";
-import reactPlugin from "eslint-plugin-react";
-import reactHooksPlugin from "eslint-plugin-react-hooks";
+import react from "eslint-plugin-react";
+import reactHooks from "eslint-plugin-react-hooks";
+import globals from "globals";
 
 export default [
-  next, // ✅ Next.js rules
-
   {
     files: ["**/*.js", "**/*.jsx", "**/*.cjs"],
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: "module",
+      //1
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+      globals: {
+        ...globals.browser,
+      },
     },
     plugins: {
       security: securityPlugin,
       sonarjs: sonarjsPlugin,
-      react: reactPlugin,
-      "react-hooks": reactHooksPlugin,
+      react,
+      "react-hooks": reactHooks,
     },
     settings: {
       react: {
@@ -36,6 +43,10 @@ export default [
       "react/react-in-jsx-scope": "off",
       "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "warn",
+      "no-unused-vars": "off",
+      "max-lines": ["warn", 500],
+      "max-nested-callbacks": ["error", 3],
+      "max-params": ["error", 3],
       complexity: ["error", 5],
       "max-depth": ["error", 3],
       "no-unsafe-optional-chaining": "error",
@@ -79,8 +90,6 @@ export default [
     files: ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx", "**/*.cjs"],
     rules: {
       ...airbnb.rules,
-      indent: ["error", 2, { SwitchCase: 1 }],
-      quotes: ["error", "single", { avoidEscape: true }],
       "arrow-body-style": "off",
       "no-underscore-dangle": "off",
       "no-debugger": "error",

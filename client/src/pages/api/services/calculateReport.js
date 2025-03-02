@@ -1,13 +1,8 @@
 function calculatePerformanceRating(eslintResults) {
-  const severityWeights = {
-    1: 1, // Warning
-    2: 5, // Error
-  };
-
   let totalPoints = 0;
 
   eslintResults.forEach((issue) => {
-    const weight = severityWeights[issue.severity] || 0;
+    const weight = issue.severity || 0;
     totalPoints += weight;
   });
 

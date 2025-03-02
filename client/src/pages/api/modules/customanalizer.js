@@ -1,12 +1,10 @@
 import Parser from "tree-sitter";
 import JavaScript from "tree-sitter-javascript";
 import fs from "fs";
-import chalk from "chalk";
 
 import detectDeeplyNestedLoops from "./nestedloop.js";
 import detectInfiniteRecursion from "./infiniteRecursion.js";
 import detectHardcodedCredentials from "./detectCredentials.js";
-import { warn } from "console";
 
 // Initialize the parser
 const parser = new Parser();
@@ -20,7 +18,7 @@ let totalErrors = 0;
 const errorSeverity = {
   warning: 4,
   info: 1,
-  low: 2,
+  low: 1,
   high: 8,
   mendium: 4,
   critical: 8,
@@ -42,12 +40,14 @@ function analyzeCode(code, fileName) {
             message: "",
             line: 0,
             column: 0,
+            endColumn: 0,
           };
           const { startPosition, endPosition } = capture.node;
           message.severity = errorSeverity[rule.severity];
           message.message = rule.description;
           message.line = startPosition.row + 1;
           message.column = startPosition.column + 1;
+          message.endColumn = endPosition.column + 1;
           messages.push(message);
         });
         totalMatches += captures.length;

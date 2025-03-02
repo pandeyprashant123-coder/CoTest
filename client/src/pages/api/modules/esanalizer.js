@@ -6,13 +6,11 @@ async function lintCode(code, filename = "temp.js") {
   try {
     const results = await eslint.lintText(code, { filePath: filename });
     await ESLint.outputFixes(results);
-    const msg =
-      results.length > 0
-        ? results[0].messages.filter((msg) => msg.ruleId !== null)
-        : [];
-
-    console.log("Lint Messages:", msg);
-    return msg;
+    const messages = results[0].messages.map((msg) => ({
+      ...msg,
+      stringSeverity: msg.severity === 2 ? 8 : 4,
+    }));
+    return messages;
   } catch (error) {
     console.error("ESLint Error:", error);
     return [];
