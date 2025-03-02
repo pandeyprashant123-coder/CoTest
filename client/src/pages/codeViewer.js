@@ -7,7 +7,7 @@ const Editor = dynamic(() => import("@monaco-editor/react"), { ssr: false });
 
 const severitydecoration = {
   1: { color: "yellow", className: "low-marker" }, // Info
-  2: { color: "blue", className: "medium-marker" }, // Info
+  // 2: { color: "blue", className: "medium-marker" }, // Info
   4: { color: "orange", className: "warning-marker" }, // Info
   8: { color: "red", className: "error-marker" }, // Error
 };
@@ -20,6 +20,7 @@ export default function CodeViewer() {
   const [markers, setMarkers] = useState([]);
   const [rating, setRating] = useState(0);
   const [severityList, setSeverityList] = useState([]);
+  const [language, setLanguage] = useState("javascript");
 
   useEffect(() => {
     if (!file) return;
@@ -32,12 +33,12 @@ export default function CodeViewer() {
       .then((data) => {
         setCodeData(data.code);
         setRating(data.rating);
-        console.log(JSON.stringify(data.message));
+        console.log(data.message);
+        setLanguage(data.language);
         setSeverityList((prevList) => {
           const newSeverities =
-            data.message?.map(({ severity }) => {
-              const newSeverity = severity;
-              return newSeverity;
+            data.message?.map(message => {
+              return message.stringSeverity ?message.stringSeverity: message.severity;
             }) || [];
           return [...prevList, ...newSeverities];
         });
@@ -70,7 +71,7 @@ export default function CodeViewer() {
       {codeData ? (
         <Editor
           height="800px"
-          defaultLanguage="python"
+          language="javascript"
           value={codeData}
           options={{ readOnly: true }}
           loading={<p>Loading editor...</p>}

@@ -4,23 +4,49 @@ import securityPlugin from "eslint-plugin-security";
 import sonarjsPlugin from "eslint-plugin-sonarjs";
 import typescriptParser from "@typescript-eslint/parser";
 import typescriptPlugin from "@typescript-eslint/eslint-plugin";
+import react from "eslint-plugin-react";
+import reactHooks from "eslint-plugin-react-hooks";
+import globals from "globals";
 
 export default [
   {
-    files: ["**/*.js", "**/*.jsx", "**/*.cjs"], // Include .cjs files
+    files: ["**/*.js", "**/*.jsx", "**/*.cjs"],
     languageOptions: {
       ecmaVersion: 2022,
-      sourceType: "module", // Use "script" for CommonJS if needed
-      parser: undefined, // Default Espree parser for JavaScript
+      sourceType: "module",
+      //1
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+      globals: {
+        ...globals.browser,
+      },
     },
     plugins: {
       security: securityPlugin,
       sonarjs: sonarjsPlugin,
+      react,
+      "react-hooks": reactHooks,
+    },
+    settings: {
+      react: {
+        version: "detect", // ✅ Auto-detect React version
+      },
     },
     rules: {
       ...js.configs.recommended.rules,
       ...securityPlugin.configs.recommended.rules,
       ...sonarjsPlugin.configs.recommended.rules,
+      "react/jsx-uses-react": "off",
+      "react/react-in-jsx-scope": "off",
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "warn",
+      "no-unused-vars": "off",
+      "max-lines": ["warn", 500],
+      "max-nested-callbacks": ["error", 3],
+      "max-params": ["error", 3],
       complexity: ["error", 5],
       "max-depth": ["error", 3],
       "no-unsafe-optional-chaining": "error",
@@ -29,17 +55,19 @@ export default [
       "no-promise-executor-return": "error",
     },
   },
+
   {
-    files: ["**/*.cjs"], // Separate rules for CommonJS files
+    files: ["**/*.cjs"], // CommonJS files
     languageOptions: {
       ecmaVersion: 2022,
-      sourceType: "script", // CommonJS mode
+      sourceType: "script",
     },
     rules: {
-      "no-var": "off", // Allow var in old-style code
-      "prefer-const": "warn", // Encourage modern syntax
+      "no-var": "off",
+      "prefer-const": "warn",
     },
   },
+
   {
     files: ["**/*.ts", "**/*.tsx"],
     languageOptions: {
@@ -57,15 +85,13 @@ export default [
       "@typescript-eslint/await-thenable": "error",
     },
   },
+
   {
     files: ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx", "**/*.cjs"],
     rules: {
       ...airbnb.rules,
-      indent: ["error", 2, { SwitchCase: 1 }],
-      quotes: ["error", "single", { avoidEscape: true }],
       "arrow-body-style": "off",
       "no-underscore-dangle": "off",
-      "no-console": process.env.NODE_ENV === "production" ? "error" : "warn",
       "no-debugger": "error",
     },
   },

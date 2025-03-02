@@ -16,7 +16,8 @@ export async function fetchRepoContentsJavascript(repoLink, dir = "") {
         !item.name.includes(".test.js") &&
         !item.name.includes(".config.ts")
       ) {
-        files.push(item.download_url);
+        const decodedURI = decodeURIComponent(item.download_url);
+        files.push(decodedURI);
       } else if (
         item.type === "dir" &&
         item.name !== "node_modules" &&
@@ -50,7 +51,8 @@ export async function fetchRepoContentsPython(repoLink, dir = "") {
         item.type === "file" &&
         allowedExtensions.some((ext) => item.name.endsWith(ext))
       ) {
-        files.push(item.download_url);
+        const decodedURI = decodeURIComponent(item.download_url);
+        files.push(decodedURI);
       } else if (
         item.type === "dir" &&
         item.name !== "images" &&

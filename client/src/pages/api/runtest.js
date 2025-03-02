@@ -82,6 +82,7 @@ analysisQueue.process(async (job) => {
       code,
       message,
       rating,
+      language,
     };
     await redis.set(`report:${fileName}`, JSON.stringify(result));
 

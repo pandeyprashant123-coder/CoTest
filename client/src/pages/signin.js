@@ -1,16 +1,7 @@
-import { signIn } from "next-auth/react"
-import React from "react"
-import { useRouter } from "next/router"
+import React from "react";
 
-const Signin = async () => {
-  const router = useRouter()
-  await signIn("github", { redirect: false }) 
+const signin = () => {
+  return <div>signin</div>;
+};
 
-  setTimeout(() => {
-    router.push("/repository")
-  }, 100)
-}
-//   return <div>signin</div>
-// }
-
-export default Signin
+export default signin;

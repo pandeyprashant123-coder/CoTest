@@ -25,6 +25,7 @@ function traverse(node) {
     message: "Hard coded credentials detected",
     line: 0,
     column: 0,
+    endColumn: 0,
   };
 
   if (node.type === "variable_declarator") {
@@ -46,9 +47,10 @@ function traverse(node) {
       // Now check if the variable's value itself matches a credential-like pattern (like a key or password)
       for (let valuePattern of valuePatterns) {
         if (valuePattern.test(variableValue)) {
-          const { startPosition } = node;
+          const { startPosition, endPosition } = node;
           message.line = startPosition.row + 1;
           message.column = startPosition.column + 1;
+          message.endColumn = endPosition.column + 1;
           message.message = "Possible hardcoded credential detected in value";
           messages.push(message);
         }

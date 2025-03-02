@@ -101,7 +101,7 @@
   {
     "name": "Compile with all possible warnings active",
     "description": "Advises compiling code with all warnings enabled and addressing them to maintain code quality.",
-    "severity": "high",
+    "severity": "low",
     "query": "(comment) @comment (#match? @comment \"TODO|FIXME|WARNING\")"
   },
   {

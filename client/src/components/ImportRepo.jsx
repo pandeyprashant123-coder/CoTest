@@ -10,7 +10,7 @@ const ratingClasses = {
   5: "bg-red-300",
   6: "bg-red-200",
   7: "bg-red-100",
-  8: "bg-red-50",
+  8: "bg-red-100",
   9: "bg-green-900",
   10: "bg-green-950",
 };
@@ -72,6 +72,7 @@ export default function ImportRepo() {
     const url = `/codeViewer?file=${encodeURIComponent(fileName)}`;
     window.open(url, "_blank");
   };
+  const sortedFiles = [...files].sort((a, b) => rating[a] - rating[b]);
 
   return (
     <div className="flex w-[70%] mx-auto flex-col min-h-[30vh] items-center justify-center pt-10">
@@ -122,14 +123,13 @@ export default function ImportRepo() {
 
       {files?.length > 0 && (
         <div
-          className={`px-3 w-[90%] mx-auto border-[1px]  border-gray-200 bg-black my-9`}
+          className={`px-3 w-[90%] mx-auto border-[1px]  border-gray-200 bg-black my-9 overflow-y-auto`}
         >
           <h2 className="mb-4 font-bold text-xl text-center">Results</h2>
           <ul>
             {files?.length > 0 ? (
-              files?.map((file, index) => {
+              sortedFiles?.map((file, index) => {
                 const textColor = Math.trunc(rating[file] / 10);
-                console.log(textColor);
                 return (
                   <li
                     key={index}
