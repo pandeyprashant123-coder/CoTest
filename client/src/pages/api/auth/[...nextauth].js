@@ -1,4 +1,4 @@
 import NextAuth from "next-auth";
-import { authOptions } from "./authoptions.js";
+import { authOptions } from "./authOptions";
 
 export default NextAuth.default(authOptions);
