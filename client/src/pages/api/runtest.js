@@ -1,6 +1,4 @@
 import axios from "axios";
-import { z } from "zod";
-import Redis from "ioredis";
 
 import analysisQueue from "./config/bull";
 import {
@@ -12,8 +10,7 @@ import { addFilesToQueue } from "./services/queue";
 import { repoSchema } from "./validation/github";
 import calculatePerformanceRating from "./services/calculateReport";
 import extractFileNameFromURL from "./services/extractFileName";
-
-const redis = new Redis();
+import redis from "./config/redis";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
