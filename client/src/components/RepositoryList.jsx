@@ -63,7 +63,7 @@ const RepositoryList = ({ accessToken }) => {
       )}`
       const response = await fetch(apiUrl, {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${accessToken}`, 
         },
       })
 
@@ -145,7 +145,7 @@ const RepositoryList = ({ accessToken }) => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="bg-gray-200 px-3 py-1 text-black">
-                    View
+                    Test
                   </a>
                 </td>
               </tr>
