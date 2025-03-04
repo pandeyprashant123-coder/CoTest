@@ -27,7 +27,7 @@ export default async function handler(req, res) {
 
     await Promise.all([
       addFilesToQueue(jsFiles, "Javascript"),
-      addFilesToQueue(pythonFiles, "python"),
+      addFilesToQueue(pythonFiles, "Python"),
     ]);
 
     const allFiles = [...jsFiles, ...pythonFiles];
