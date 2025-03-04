@@ -63,7 +63,9 @@ analysisQueue.process(async (job) => {
       message = await test(code, tree);
     } else if (language === "Python") {
       const response = await axios.post(process.env.PYTHON_API_URL, { code });
-      message = response.data;
+      const code_report = response.data;
+      message = code_report.errors;
+      ELOC = code_report.total_eloc;
     }
 
     const rating = calculatePerformanceRating(message || []);

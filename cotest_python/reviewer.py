@@ -1,6 +1,7 @@
 import argparse
 import ast
 
+from cotest_python.calculate_eloc import calculate_eloc
 from cotest_python.models import CodeError
 from cotest_python.rules.duplicate_dictkeys import DuplicateDictKeysRule
 from cotest_python.rules.empty_function import EmptyFunctionRule
@@ -27,10 +28,12 @@ class Reviewer:
             LongFunctionRule(rule_name="Long function"),
         ]
 
-    def review(self, source_code: str) -> list[CodeError]:
+    def review(self, source_code: str) -> tuple[list[CodeError], int]:
         errors: list[CodeError] = []
+        total_eloc = 0
         try:
             tree = ast.parse(source_code)
+            total_eloc = calculate_eloc(tree)
             for rule in self.rules:
                 errors.extend(rule.check(tree))
         except SyntaxError as e:
@@ -43,8 +46,7 @@ class Reviewer:
                     column=e.offset or 0,
                 )
             )
-
-        return sorted(errors, key=lambda e: e.line)
+        return sorted(errors, key=lambda e: e.line), total_eloc
 
 
 def main():
@@ -57,8 +59,9 @@ def main():
 
     reviewer = Reviewer()
 
-    errors = reviewer.review(source_code)
+    errors, total_eloc = reviewer.review(source_code)
 
+    print(f"Total eloc {total_eloc}")
     if errors:
         for error in errors:
             print(f"Line {error.line}: {error.message}")
