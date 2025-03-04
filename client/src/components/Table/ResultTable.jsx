@@ -105,30 +105,32 @@ const ResultTable = ({ sortedFiles, handleFileClick }) => {
             })
           ) : (
             <tr>
-              <td colSpan="2" className="py-3 px-6 text-center">
+              <td colSpan="6" className="py-3 px-6 text-center">
                 No files found.
               </td>
             </tr>
           )}
         </tbody>
       </table>
-      <div className="flex justify-center mt-4">
-        <button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-          className="px-4 py-2 mx-2 bg-gray-200 text-gray-700 rounded-md disabled:opacity-50"
-        >
-          Previous
-        </button>
-        <span className="py-2">{`${currentPage} of ${totalPages}`}</span>
-        <button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
-          className="px-4 py-2 mx-2 bg-gray-200 text-gray-700 rounded-md disabled:opacity-50"
-        >
-          Next
-        </button>
-      </div>
+      {currentFiles?.length > 0 && (
+        <div className="flex justify-center mt-4">
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="px-4 py-2 mx-2 bg-gray-200 text-gray-700 rounded-md disabled:opacity-50"
+          >
+            Previous
+          </button>
+          <span className="py-2">{`${currentPage} of ${totalPages}`}</span>
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className="px-4 py-2 mx-2 bg-gray-200 text-gray-700 rounded-md disabled:opacity-50"
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 };
