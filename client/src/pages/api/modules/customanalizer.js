@@ -1,14 +1,14 @@
-import Parser from "tree-sitter";
-import JavaScript from "tree-sitter-javascript";
+
 import rules from "../rules/jsrules.json";
 
 import detectDeeplyNestedLoops from "./nestedloop.js";
 import detectInfiniteRecursion from "./infiniteRecursion.js";
 import detectHardcodedCredentials from "./detectCredentials.js";
-
+import calculateELOC from "./calculateELOC";
+import parser from "../config/parser";
 // Initialize the parser
-const parser = new Parser();
-parser.setLanguage(JavaScript);
+// const parser = new Parser();
+// parser.setLanguage(JavaScript);
 let totalMatches = 0;
 let totalErrors = 0;
 const errorSeverity = {
@@ -20,9 +20,7 @@ const errorSeverity = {
   critical: 8,
 };
 
-function analyzeCode(code, fileName) {
-  const tree = parser.parse(code);
-  // console.log(tree);
+function analyzeCode(tree, fileName) {
 
   let messages = [];
   rules.forEach((rule, index) => {

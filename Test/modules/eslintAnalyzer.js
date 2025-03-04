@@ -83,6 +83,7 @@ async function lintCode(code, filename = "testFile.js") {
   const formatter = await eslint.loadFormatter("stylish");
   //   console.log(formatter.format(results));
   // console.log(results[0].messages);
+  console.log(results);
   return results[0].messages;
 }
 

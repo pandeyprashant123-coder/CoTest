@@ -13,14 +13,34 @@ const rules = JSON.parse(fs.readFileSync("./rules/jsrule.json", "utf8"));
 
 let totalMatches = 0;
 let totalErrors = 0;
+function calculateELOC(node) {
+  if (!node || typeof node !== "object") return 0;
+
+  if (
+    node.type === "function_declaration" ||
+    node.type === "function_expression" ||
+    node.type === "arrow_function"
+  ) {
+    const startLine = node.startPosition.row;
+    const endLine = node.endPosition.row;
+    return endLine - startLine + 1;
+  }
+
+  let totalELOC = 0;
+  for (let child of node.namedChildren) {
+    totalELOC += calculateELOC(child);
+  }
+
+  return totalELOC;
+}
 
 function analyzeCode(code) {
   const tree = parser.parse(code);
 
-  let messages = [];
-  // console.log(chalk.bold.blue("\n===== Code Analysis Report =====\n"));
+  const loc = calculateELOC(tree.rootNode);
+  console.log("loc: ", loc);
 
-  // Apply predefined rules
+  let messages = [];
   rules.forEach((rule, index) => {
     try {
       const queryObj = new Parser.Query(JavaScript, rule.query);
@@ -35,58 +55,25 @@ function analyzeCode(code) {
             column: 0,
           };
           const { startPosition, endPosition } = capture.node;
-          console.log(startPosition,"hell",endPosition)
+          console.log(startPosition, "hell", endPosition);
           message.severity = rule.severity === "warning" ? 1 : 2;
           message.message = rule.description;
           message.line = startPosition.row + 1;
           message.column = startPosition.column + 1;
           messages.push(message);
-          // console.log(chalk.bold.yellow(`Rule: ${rule.name}`));
-          // console.log(`  Description: ${rule.description}`);
-          // console.log(
-          //   chalk.red(
-          //     `  Severity: ${rule.severity.toUpperCase()} at Line ${
-          //       startPosition.row + 1
-          //     }`
-          //   )
-          // );
-          // console.log(
-          //   `  Node: ${capture.name}, Start: Line ${
-          //     startPosition.row + 1
-          //   }, Column ${startPosition.column + 1}, End: Line ${
-          //     endPosition.row + 1
-          //   }, Column ${endPosition.column + 1}`
-          // );
-          // console.log(chalk.gray("  -------------------------------------\n"));
         });
         totalMatches += captures.length;
       }
     } catch (error) {
       totalErrors++;
-      // console.error(chalk.red(`Error with Rule ${index + 1}: ${rule.name}`));
-      // console.error(chalk.red(`  ${error.message}\n`));
     }
   });
-
-  // Detect deeply nested loops
-  // messages.push(detectDeeplyNestedLoops(tree.rootNode));
-
-  // //recursions
-  // messages.push(detectInfiniteRecursion(tree.rootNode));
-
-  // // messages.concat(detectHardcodedCredentials(tree.rootNode));
-  // console.log(detectHardcodedCredentials(tree.rootNode));
   const mainMessage = messages.concat(
     detectDeeplyNestedLoops(tree.rootNode),
     detectInfiniteRecursion(tree.rootNode),
     detectHardcodedCredentials(tree.rootNode)
   );
   return mainMessage;
-
-  console.log(chalk.bold.blue("\n===== Analysis Summary ====="));
-  console.log(`  Total Rules Applied: ${rules.length}`);
-  console.log(`  Total Matches Found: ${chalk.green(totalMatches)}`);
-  console.log(`  Total Errors Encountered: ${chalk.red(totalErrors)}\n`);
 }
 
 module.exports = analyzeCode;
