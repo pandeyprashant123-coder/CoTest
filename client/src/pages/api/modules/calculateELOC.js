@@ -4,7 +4,8 @@ function calculateELOC(node) {
   if (
     node.type === "function_declaration" ||
     node.type === "function_expression" ||
-    node.type === "arrow_function"
+    node.type === "arrow_function"||
+    node.type === "class_declaration"
   ) {
     const startLine = node.startPosition.row;
     const endLine = node.endPosition.row;

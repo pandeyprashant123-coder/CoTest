@@ -61,8 +61,6 @@ export default function ImportRepo() {
   const sortedFiles = files.sort(
     (a, b) => parseFloat(a.rating) - parseFloat(b.rating)
   );
-
-  console.log(sortedFiles);
   return (
     <div className="flex w-[80%] mx-auto flex-col min-h-[30vh] items-center justify-center pt-10">
       <div
