@@ -1,4 +1,3 @@
-let messages = [];
 function traverse(node, depth = 0, maxDepth = 3) {
   // console.log(node);
   const loopTypes = ["for_statement", "while_statement", "do_statement"];

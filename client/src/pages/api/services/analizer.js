@@ -1,8 +1,8 @@
 import analyzeCode from "../modules/customanalizer";
 import lintCode from "../modules/esanalizer";
 
-export async function test(code) {
-  const msg1 = await analyzeCode(code);
+export async function test(code,tree) {
+  const msg1 = await analyzeCode(tree);
   const msg2 = await lintCode(code);
   const message = msg1.concat(msg2);
   const msg = filter(message);

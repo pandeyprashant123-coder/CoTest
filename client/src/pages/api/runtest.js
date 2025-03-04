@@ -11,6 +11,8 @@ import { repoSchema } from "./validation/github";
 import calculatePerformanceRating from "./services/calculateReport";
 import extractFileNameFromURL from "./services/extractFileName";
 import redis from "./config/redis";
+import parser from "./config/parser";
+import calculateELOC from "./modules/calculateELOC";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -43,8 +45,9 @@ export default async function handler(req, res) {
     const fileNames = files.map((file) => {
       return extractFileNameFromURL(file);
     });
+    console.log(majorReport);
 
-    res.status(200).json({ files: fileNames, majorReport });
+    res.status(200).json({ majorReport });
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
   }
@@ -62,14 +65,19 @@ analysisQueue.process(async (job) => {
 
   try {
     let message;
+    let ELOC;
     if (language === "Javascript") {
-      message = await test(code);
+      const tree = parser.parse(code);
+      const LOC = calculateELOC(tree.rootNode);
+      ELOC = LOC;
+      message = await test(code, tree);
     } else if (language === "Python") {
       const response = await axios.post(process.env.PYHON_API_URL, { code });
       message = response.data;
     }
     const rating = calculatePerformanceRating(message);
-    console.log(rating);
+    console.log(rating, ELOC);
+    const issues = message.length;
 
     // Store analysis result in Redis
     const result = {
@@ -77,6 +85,8 @@ analysisQueue.process(async (job) => {
       message,
       rating,
       language,
+      issues,
+      ELOC,
     };
     await redis.set(`report:${fileName}`, JSON.stringify(result));
 
@@ -111,9 +121,15 @@ async function getAllReports(files) {
   const reports = await Promise.all(
     fileNames.map(async (fileName) => {
       const report = await redis.get(`report:${fileName}`);
-      return [fileName, report ? JSON.parse(report).rating : {}];
+      const newReport = JSON.parse(report);
+      const majorReport = {
+        fileName,
+        rating: newReport.rating,
+        issues: newReport.issues,
+        ELOC: newReport.ELOC,
+      };
+      return report ? majorReport : {};
     })
   );
-
-  return Object.fromEntries(reports);
+  return reports;
 }
