@@ -3,19 +3,6 @@ import React, { useState, useEffect } from "react";
 import RepoListModal from "./RepoListModal";
 import ResultTable from "./Table/ResultTable";
 
-const ratingClasses = {
-  1: "bg-red-700",
-  2: "bg-red-600",
-  3: "bg-red-500",
-  4: "bg-red-400",
-  5: "bg-red-300",
-  6: "bg-red-200",
-  7: "bg-red-100",
-  8: "bg-green-600",
-  9: "bg-green-900",
-  10: "bg-green-950",
-};
-
 export default function ImportRepo() {
   const [link, setLink] = useState(
     localStorage.getItem("selectedRepoUrl") || ""
@@ -37,10 +24,6 @@ export default function ImportRepo() {
     }
   }, [flag]);
 
-  useEffect(() => {
-    handleSubmit();
-  }, [link]);
-
   console.log(link);
   const handleSubmit = async () => {
     // e.preventDefault();
@@ -52,7 +35,7 @@ export default function ImportRepo() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ link, language }),
+        body: JSON.stringify({ link }),
       });
       const data = await res.json();
       if (res.ok) {
@@ -86,7 +69,10 @@ export default function ImportRepo() {
         // onSubmit={handleSubmit}
         className="p-5 flex flex-col items-center gap-3 mx-auto"
       >
-        <h1>Currently selected Repo: {`${link}`}</h1>
+        <h1>
+          Currently selected Repo:{" "}
+          {`${link.split("/")[link.split("/").length - 1]}`}
+        </h1>
         <div className="flex flex-row justify-center w-full mx-auto gap-3">
           <button
             className="bg-blue-500 text-white px-4 py-2 rounded-lg"
@@ -111,18 +97,12 @@ export default function ImportRepo() {
             required
             className="py-3 px-6 border-[1px] border-black text-black w-[500px]"
           /> */}
-          <select
-            value={language}
-            onChange={(e) => setLanguage(e.target.value)}
-            className="border-[1px] border-black text-black outline-none px-2"
-          >
-            <option value="Javascript">Javascript</option>
-            <option value="Python">Python</option>
-          </select>
         </div>
         <button
           type="submit"
-          className="py-3 px-6 w-max border-[1px] border-black "
+          className="py-3 px-6 w-max border-[1px] border-black hover:bg-gray-300 hover:text-black rounded-lg"
+          onClick={handleSubmit}
+          disabled={loading}
         >
           {loading ? `Loading...` : `Check Files`}
         </button>

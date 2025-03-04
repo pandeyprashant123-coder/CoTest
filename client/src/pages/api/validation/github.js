@@ -6,5 +6,4 @@ export const repoSchema = z.object({
     .string()
     .url("Invalid URL format")
     .startsWith("https://github.com/", "Only GitHub URLs are allowed"),
-  language: z.enum(["Javascript", "Python"]),
 });

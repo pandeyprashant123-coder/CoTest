@@ -1,7 +1,7 @@
-function calculatePerformanceRating(eslintResults) {
+function calculatePerformanceRating(message) {
   let totalPoints = 0;
 
-  eslintResults.forEach((issue) => {
+  message.map((issue) => {
     const weight = issue.severity || 0;
     totalPoints += weight;
   });
