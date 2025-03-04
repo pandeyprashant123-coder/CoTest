@@ -17,7 +17,11 @@ export default async function handler(req, res) {
 
   try {
     const { link } = repoSchema.parse(req.body);
-    const { pythonFiles = [], jsFiles = [] } = await fetchRepoContents(link);
+    const {
+      pythonFiles = [],
+      jsFiles = [],
+      language = [],
+    } = await fetchRepoContents(link);
 
     if (jsFiles.length === 0 && pythonFiles.length === 0) {
       return res
@@ -34,7 +38,7 @@ export default async function handler(req, res) {
     await waitForAnalysisCompletion(allFiles);
 
     const majorReport = await getAllReports(allFiles);
-    return res.status(200).json({ majorReport });
+    return res.status(200).json({ majorReport, language });
   } catch (error) {
     console.error("Handler Error:", error);
     return res.status(500).json({ error: "Internal Server Error" });
