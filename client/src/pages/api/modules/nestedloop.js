@@ -14,7 +14,7 @@ function traverse(node, depth = 0, maxDepth = 3) {
       const { startPosition } = node;
       message.line = startPosition.row + 1;
       message.column = startPosition.column + 1;
-      messages.push(message);
+      message.push(message);
     }
   }
 
