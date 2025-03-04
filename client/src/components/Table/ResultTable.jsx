@@ -31,7 +31,7 @@ const ResultTable = ({ sortedFiles, handleFileClick }) => {
 
   const handleRatingSortAsc = () => {
     const sorted = [...filteredFiles].sort(
-      (a, b) => parseFloat(a.rating) - parseFloat(b.rating)
+      (a, b) => parseFloat(b.rating) - parseFloat(a.rating)
     );
     setFilteredFiles(sorted);
   };
@@ -58,6 +58,7 @@ const ResultTable = ({ sortedFiles, handleFileClick }) => {
                     src="/icons/down-arrow.png"
                     width={16}
                     height={16}
+                    alt="Image"
                   />
                   <Image
                     className=" cursor-pointer"
@@ -65,6 +66,7 @@ const ResultTable = ({ sortedFiles, handleFileClick }) => {
                     src="/icons/down-arrow.png"
                     width={16}
                     height={16}
+                    alt="Image"
                   />
                 </div>
               </div>
