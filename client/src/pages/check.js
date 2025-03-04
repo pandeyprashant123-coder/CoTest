@@ -19,7 +19,7 @@ const Check = () => {
 
   useEffect(() => {
     if (status === "unauthenticated") {
-      signIn("github", { callbackUrl: "/repository" });
+      signIn("github");
     }
   }, [status, router]);
 
