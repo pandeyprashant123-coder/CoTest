@@ -10,3 +10,4 @@ class CodeError(BaseModel):
     severity: int
     line: int
     endline: int
+    column: int = 0
