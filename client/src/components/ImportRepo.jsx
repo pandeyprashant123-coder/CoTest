@@ -57,8 +57,9 @@ export default function ImportRepo() {
       const data = await res.json();
       if (res.ok) {
         console.log(data);
-        setFiles(data.files);
-        setRating(data.majorReport);
+        setFiles(data.majorReport);
+        // setFiles(data.files);
+        // setRating(data.majorReport);
         setLoading(false);
       } else {
         setError(data.error);
@@ -74,8 +75,11 @@ export default function ImportRepo() {
     const url = `/codeViewer?file=${encodeURIComponent(fileName)}`;
     window.open(url, "_blank");
   };
-  const sortedFiles = [...files].sort((a, b) => rating[a] - rating[b]);
+  const sortedFiles = files.sort(
+    (a, b) => parseFloat(a.rating) - parseFloat(b.rating)
+  );
 
+  console.log(sortedFiles);
   return (
     <div className="flex w-[80%] mx-auto flex-col min-h-[30vh] items-center justify-center pt-10">
       <div
@@ -190,10 +194,9 @@ export default function ImportRepo() {
               )}
             </tbody>
           </table> */}
-          
+
           <ResultTable
             sortedFiles={sortedFiles}
-            rating={rating}
             handleFileClick={handleFileClick}
           />
         </div>

@@ -12,7 +12,7 @@ const ratingClasses = {
   9: "bg-green-900",
   10: "bg-green-950",
 };
-const ResultTable = ({ sortedFiles, rating, handleFileClick }) => {
+const ResultTable = ({ sortedFiles, handleFileClick }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [filteredFiles, setFilteredFiles] = useState(sortedFiles);
   const [currentFiles, setCurrentFiles] = useState([]);
@@ -30,11 +30,15 @@ const ResultTable = ({ sortedFiles, rating, handleFileClick }) => {
   };
 
   const handleRatingSortAsc = () => {
-    const sorted = [...filteredFiles].sort((a, b) => rating[b] - rating[a]);
+    const sorted = [...filteredFiles].sort(
+      (a, b) => parseFloat(a.rating) - parseFloat(b.rating)
+    );
     setFilteredFiles(sorted);
   };
   const handleRatingSortDesc = () => {
-    const sorted = [...filteredFiles].sort((a, b) => rating[a] - rating[b]);
+    const sorted = [...filteredFiles].sort(
+      (a, b) => parseFloat(a.rating) - parseFloat(b.rating)
+    );
     setFilteredFiles(sorted);
   };
   return (
@@ -65,31 +69,35 @@ const ResultTable = ({ sortedFiles, rating, handleFileClick }) => {
                 </div>
               </div>
             </th>
+            <th className="py-3 px-6 text-left">Issues</th>
+            <th className="py-3 px-6 text-left">ELOC</th>
           </tr>
         </thead>
         <tbody>
           {currentFiles?.length > 0 ? (
             currentFiles?.map((file, index) => {
-              const textColor = Math.trunc(rating[file] / 10);
+              const textColor = Math.trunc(file.rating / 10);
               return (
                 <tr
                   key={index}
                   className={`group hover:bg-gray-700 ${
                     index % 2 == 0 ? "bg-[#715DE3]/20" : "bg-[#715DE3]/30"
                   } cursor-pointer  transition`}
-                  onClick={() => handleFileClick(file)}
+                  onClick={() => handleFileClick(file.fileName)}
                 >
                   <td className="py-3 px-6">
                     {(currentPage - 1) * itemsPerPage + index + 1}
                   </td>
-                  <td className="py-3 px-6">{file}</td>
+                  <td className="py-3 px-6">{file.fileName}</td>
                   <td className={`py-3 px-6 `}>
                     <div
                       className={`w-fit py-1 px-2 rounded-2xl ${ratingClasses[textColor]}`}
                     >
-                      {Number(rating[file])}%
+                      {Number(file.rating)}%
                     </div>
                   </td>
+                  <td className={`py-3 px-6 `}>{file.issues}</td>
+                  <td className={`py-3 px-6 `}>{file.ELOC}</td>
                 </tr>
               );
             })
