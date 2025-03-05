@@ -69,7 +69,7 @@ export default function ImportRepo({ repo }) {
       >
         <h1>
           Currently selected Repo:{" "}
-          {`${link.split("/")[link.split("/").length - 1]}`}
+          {`${link.split("/")[link.split("/").length - 1]}`} 
         </h1>
         <div className="flex flex-row justify-center w-full mx-auto gap-3">
           <button
