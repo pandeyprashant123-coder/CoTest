@@ -5,9 +5,7 @@ import ResultTable from "./Table/ResultTable"
 import Link from "next/link"
 
 export default function RepoLinkImport() {
-  const [link, setLink] = useState(
-    localStorage.getItem("selectedRepoUrl") || ""
-  )
+  const [link, setLink] = useState("")
   const [result, setResult] = useState(null)
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -18,12 +16,12 @@ export default function RepoLinkImport() {
   const router = useRouter()
   const [rating, setRating] = useState(null)
 
-  useEffect(() => {
-    const savedRepoUrl = localStorage.getItem("selectedRepoUrl")
-    if (savedRepoUrl) {
-      setLink(savedRepoUrl)
-    }
-  }, [flag])
+  //   useEffect(() => {
+  //     const savedRepoUrl = localStorage.getItem("selectedRepoUrl")
+  //     if (savedRepoUrl) {
+  //       setLink(savedRepoUrl)
+  //     }
+  //   }, [flag])
 
   console.log(link)
   const handleSubmit = async () => {

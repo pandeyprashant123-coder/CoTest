@@ -19,11 +19,11 @@ const Checkwithurl = () => {
 
   const router = useRouter()
 
-  useEffect(() => {
-    if (status === "unauthenticated") {
-      signIn("github")
-    }
-  }, [status, router])
+  //   useEffect(() => {
+  //     if (status === "unauthenticated") {
+  //       signIn("github")
+  //     }
+  //   }, [status, router])
 
   if (status === "loading") {
     return <p>Loading...</p>

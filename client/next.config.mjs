@@ -8,6 +8,13 @@ const nextConfig = {
   env: {
     PERSONAL_ACCESS_TOKEN: "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",
   },
-};
+  images: {
+    remotePatterns: [
+      {
+        hostname: "avatars.githubusercontent.com",
+      },
+    ],
+  },
+}
 
-export default nextConfig;
+export default nextConfig
