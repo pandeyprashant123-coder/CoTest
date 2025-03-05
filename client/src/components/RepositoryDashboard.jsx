@@ -16,13 +16,27 @@ const ratingClasses = {
   9: "text-green-900",
   10: "text-green-950",
 };
+const languageColor = {
+  JavaScript: "bg-yellow-500",
+  Python: "bg-blue-500",
+  Java: "bg-red-500",
+  C: "bg-gray-500",
+  Cpp: "bg-gray-500",
+  Ruby: "bg-red-500",
+  PHP: "bg-blue-500",
+  HTML: "bg-yellow-500",
+  CSS: "bg-blue-500",
+  SCSS: "bg-blue-500",
+  Shell: "bg-gray-500",
+  TypeScript: "bg-blue-500",
+}
 
 const RepositoryDashboard = () => {
   const [link, setLink] = useState("");
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [language, setLanguage] = useState("Javascript");
+  const [language, setLanguage] = useState({});
   const [files, setFiles] = useState([]);
   const router = useRouter();
   const [rating, setRating] = useState(null);
@@ -58,6 +72,7 @@ const RepositoryDashboard = () => {
       if (res.ok) {
         console.log(data);
         setFiles(data.majorReport);
+        setLanguage(data.language);
         setLoading(false);
       } else {
         setError(data.error);
@@ -83,6 +98,27 @@ const RepositoryDashboard = () => {
       sum += parseInt(file.rating);
     });
     return (sum / files.length).toFixed(2);
+  };
+  const totalLOC = () => {
+    let sum = 0;
+    Object.keys(language).forEach((key) => {
+      sum += parseInt(language[key]);
+    });
+    return sum.toFixed(1);
+  };
+  const totalELOC = () => {
+    let sum = 0;
+    files?.forEach((file) => {
+      sum += parseInt(file.ELOC);
+    });
+    return sum.toFixed(1);
+  };
+  const totalIssues = () => {
+    let sum = 0;
+    files?.forEach((file) => {
+      sum += parseInt(file.issues);
+    });
+    return sum.toFixed(0);
   };
 
   if (loading) {
@@ -131,7 +167,7 @@ const RepositoryDashboard = () => {
               <h2 className="text-sm text-gray-600 mb-2">Overall rating</h2>
               <div
                 className={`text-5xl font-bold ${
-                  ratingClasses[Math.trunc(calculateOverallRating()/10)]
+                  ratingClasses[Math.trunc(calculateOverallRating() / 10)]
                 }`}
               >
                 {calculateOverallRating()}%
@@ -141,50 +177,49 @@ const RepositoryDashboard = () => {
             {/* Executable LOC */}
             <div className="bg-white shadow rounded-lg p-5">
               <h2 className="text-sm text-gray-600 mb-2">Executable LOC</h2>
-              <div className="text-4xl font-bold text-gray-500">1K</div>
+              <div className="text-4xl font-bold text-gray-500">
+                {totalELOC() / 1000}K
+              </div>
             </div>
 
             {/* Total LOC */}
             <div className="bg-white shadow rounded-lg p-5">
               <h2 className="text-sm text-gray-600 mb-2">Total LOC</h2>
-              <div className="text-4xl font-bold text-gray-500">1.1K</div>
+              <div className="text-4xl font-bold text-gray-500">
+                {totalLOC() / 1000}K
+              </div>
             </div>
 
             {/* Languages */}
             <div className="bg-white shadow rounded-lg p-5">
               <h2 className="text-sm text-gray-600 mb-2">Languages</h2>
-              <div className="flex items-center justify-between">
-                <div className="flex flex-col">
-                  <div className="w-12 h-12 bg-purple-200 rounded-full flex  items-center justify-center">
-                    <span className="text-xs text-purple-800">0.2%</span>
-                  </div>
-                  <span className="flex  justify-center text-xs text-purple-800">
-                    Typescript
-                  </span>
-                </div>
-                <div className="flex flex-col">
-                  <div className="w-12 h-12 bg-gray-200 rounded-full flex  items-center justify-center">
-                    <span className="text-xs text-gray-800">0.2%</span>
-                  </div>
-                  <span className="flex  justify-center text-xs text-gray-800">
-                    HTML
-                  </span>
-                </div>
-                <div className="flex flex-col">
-                  <div className="w-12 h-12 bg-yellow-200 rounded-full flex  items-center justify-center">
-                    <span className="text-xs text-yellow-800">0.2%</span>
-                  </div>
-                  <span className="flex  justify-center text-xs text-yellow-800">
-                    Javascript
-                  </span>
-                </div>
+              <div className="flex items-center justify-center">
+                {
+                  Object.entries(language).map(([key, value]) => {
+                    let total = 0;
+                    Object.values(language).forEach((val) => {
+                      total += val;
+                    });
+                    return(
+                    <div className="flex flex-col">
+                      <div className={`w-12 h-12 ${languageColor[key]} rounded-full flex  items-center justify-center`}>
+                        <span className="text-xs text-white">{(value/total *100).toFixed(2)}%</span>
+                      </div>
+                      <span className={`flex  justify-center text-xs text-gray-500`}>
+                        {key}
+                      </span>
+                    </div>
+                  )})
+                }
               </div>
             </div>
 
             {/* Code Issues */}
             <div className="bg-white shadow rounded-lg p-5">
               <h2 className="text-sm text-gray-600 mb-2">Total Issues</h2>
-              <div className="text-4xl font-bold text-orange-500">22</div>
+              <div className="text-4xl font-bold text-orange-500">
+                {totalIssues()}
+              </div>
               <div className="text-xs text-red-500 mt-2">
                 Critically high Code issue density
               </div>
