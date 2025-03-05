@@ -29,7 +29,7 @@ const languageColor = {
   SCSS: "bg-blue-500",
   Shell: "bg-gray-500",
   TypeScript: "bg-blue-500",
-}
+};
 
 const RepositoryDashboard = () => {
   const [link, setLink] = useState("");
@@ -143,22 +143,9 @@ const RepositoryDashboard = () => {
 
         <div className="max-w-[90%] mx-auto">
           <div className="flex items-center gap-3">
-            <h1 className=" text-2xl font-bold mb-6">REPOSITORY : {}</h1>
-            <div className="text-sm text-gray-100 mb-4 flex items-center gap-1">
-              <svg
-                viewBox="0 0 15 15"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                width="15"
-                height="15"
-              >
-                <path
-                  d="M7.5 7.5H7a.5.5 0 00.146.354L7.5 7.5zm0 6.5A6.5 6.5 0 011 7.5H0A7.5 7.5 0 007.5 15v-1zM14 7.5A6.5 6.5 0 017.5 14v1A7.5 7.5 0 0015 7.5h-1zM7.5 1A6.5 6.5 0 0114 7.5h1A7.5 7.5 0 007.5 0v1zm0-1A7.5 7.5 0 000 7.5h1A6.5 6.5 0 017.5 1V0zM7 3v4.5h1V3H7zm.146 4.854l3 3 .708-.708-3-3-.708.708z"
-                  fill="currentColor"
-                ></path>
-              </svg>
-              <span>29 May 2024 10:19</span>
-            </div>
+            <h1 className=" text-2xl font-bold mb-6">
+              REPOSITORY : {link.split("/")[link.split("/").length - 1]}
+            </h1>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
@@ -194,23 +181,28 @@ const RepositoryDashboard = () => {
             <div className="bg-white shadow rounded-lg p-5">
               <h2 className="text-sm text-gray-600 mb-2">Languages</h2>
               <div className="flex items-center justify-center">
-                {
-                  Object.entries(language).map(([key, value]) => {
-                    let total = 0;
-                    Object.values(language).forEach((val) => {
-                      total += val;
-                    });
-                    return(
+                {Object.entries(language).map(([key, value]) => {
+                  let total = 0;
+                  Object.values(language).forEach((val) => {
+                    total += val;
+                  });
+                  return (
                     <div className="flex flex-col">
-                      <div className={`w-12 h-12 ${languageColor[key]} rounded-full flex  items-center justify-center`}>
-                        <span className="text-xs text-white">{(value/total *100).toFixed(2)}%</span>
+                      <div
+                        className={`w-12 h-12 ${languageColor[key]} rounded-full flex  items-center justify-center`}
+                      >
+                        <span className="text-xs text-white">
+                          {((value / total) * 100).toFixed(2)}%
+                        </span>
                       </div>
-                      <span className={`flex  justify-center text-xs text-gray-500`}>
+                      <span
+                        className={`flex  justify-center text-xs text-gray-500`}
+                      >
                         {key}
                       </span>
                     </div>
-                  )})
-                }
+                  );
+                })}
               </div>
             </div>
 
