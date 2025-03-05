@@ -35,8 +35,6 @@ export default async function handler(req, res) {
     ]);
 
     const allFiles = [...jsFiles, ...pythonFiles];
-    await waitForAnalysisCompletion(allFiles);
-
     const majorReport = await getAllReports(allFiles);
     return res.status(200).json({ majorReport, language });
   } catch (error) {
