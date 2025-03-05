@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { Kanit } from "next/font/google"
 import Image from "next/image"
+import Link from "next/link"
 
 const kanit = Kanit({
   weight: ["100", "200", "300", "500", "600", "700", "800", "400"],
@@ -63,7 +64,7 @@ const RepositoryList = ({ accessToken }) => {
       )}`
       const response = await fetch(apiUrl, {
         headers: {
-          Authorization: `Bearer ${accessToken}`, 
+          Authorization: `Bearer ${accessToken}`,
         },
       })
 
@@ -139,14 +140,22 @@ const RepositoryList = ({ accessToken }) => {
                   )}
                 </td>
                 {/* <td>{repo.stargazers_count}</td> */}
-                <td className=" px-5">
+                <td className=" pl-5">
                   <a
                     href={repo.html_url}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="bg-gray-200 px-3 py-1 text-black">
-                    Test
+                    View
                   </a>
+                </td>
+                <td className=" pr-5">
+                  <Link
+                    href={`/check?repo=${repo.html_url}`}
+                    rel="noopener noreferrer"
+                    className="bg-gray-200 px-3 py-1 text-black">
+                    Test
+                  </Link>
                 </td>
               </tr>
             ))}

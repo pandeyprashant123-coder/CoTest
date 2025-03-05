@@ -1,6 +1,6 @@
-import { useRouter } from "next/router";
-import React, { useState, useEffect } from "react";
-import RepoListModal from "./RepoListModal";
+import { useRouter } from "next/router"
+import React, { useState, useEffect } from "react"
+import RepoListModal from "./RepoListModal"
 
 const ratingClasses = {
   1: "bg-red-700",
@@ -13,38 +13,38 @@ const ratingClasses = {
   8: "bg-red-100",
   9: "bg-green-900",
   10: "bg-green-950",
-};
+}
 
-export default function ImportRepo() {
+export default function ImportRepo({ repo }) {
   const [link, setLink] = useState(
     localStorage.getItem("selectedRepoUrl") || ""
-  );
-  const [result, setResult] = useState(null);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [language, setLanguage] = useState("Javascript");
-  const [files, setFiles] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [flag, setFlag] = useState(0);
-  const router = useRouter();
-  const [rating, setRating] = useState(null);
+  )
+  const [result, setResult] = useState(null)
+  const [error, setError] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const [language, setLanguage] = useState("Javascript")
+  const [files, setFiles] = useState([])
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [flag, setFlag] = useState(0)
+  const router = useRouter()
+  const [rating, setRating] = useState(null)
 
   useEffect(() => {
-    const savedRepoUrl = localStorage.getItem("selectedRepoUrl");
+    const savedRepoUrl = localStorage.getItem("selectedRepoUrl")
     if (savedRepoUrl) {
-      setLink(savedRepoUrl);
+      setLink(savedRepoUrl)
     }
-  }, [flag]);
+  }, [flag])
 
   useEffect(() => {
-    handleSubmit();
-  }, [link]);
+    handleSubmit()
+  }, [link])
 
-  console.log(link);
+  console.log(link)
   const handleSubmit = async () => {
     // e.preventDefault();
-    setError(null);
-    setLoading(true);
+    setError(null)
+    setLoading(true)
     try {
       const res = await fetch("/api/runtest", {
         method: "POST",
@@ -52,41 +52,39 @@ export default function ImportRepo() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ link, language }),
-      });
-      const data = await res.json();
+      })
+      const data = await res.json()
       if (res.ok) {
-        setFiles(data.files);
-        setRating(data.majorReport);
-        setLoading(false);
+        setFiles(data.files)
+        setRating(data.majorReport)
+        setLoading(false)
       } else {
-        setError(data.error);
-        setLoading(false);
+        setError(data.error)
+        setLoading(false)
       }
     } catch (err) {
-      setError("An unexpected error occurred");
-      setLoading(false);
+      setError("An unexpected error occurred")
+      setLoading(false)
     }
-  };
+  }
 
   const handleFileClick = (fileName) => {
-    const url = `/codeViewer?file=${encodeURIComponent(fileName)}`;
-    window.open(url, "_blank");
-  };
-  const sortedFiles = [...files].sort((a, b) => rating[a] - rating[b]);
+    const url = `/codeViewer?file=${encodeURIComponent(fileName)}`
+    window.open(url, "_blank")
+  }
+  const sortedFiles = [...files].sort((a, b) => rating[a] - rating[b])~
 
   return (
     <div className="flex w-[70%] mx-auto flex-col min-h-[30vh] items-center justify-center pt-10">
       <div
         // onSubmit={handleSubmit}
-        className="p-5 flex flex-col items-center gap-3 mx-auto"
-      >
+        className="p-5 flex flex-col items-center gap-3 mx-auto">
         <h1>Currently selected Repo: {`${link}`}</h1>
         <div className="flex flex-row justify-center w-full mx-auto gap-3">
           <button
             className="bg-blue-500 text-white px-4 py-2 rounded-lg"
             onClick={() => setIsModalOpen(true)}
-            disabled={loading}
-          >
+            disabled={loading}>
             {loading ? "Loading..." : "Select Repository"}
           </button>
           {isModalOpen && (
@@ -108,8 +106,7 @@ export default function ImportRepo() {
           <select
             value={language}
             onChange={(e) => setLanguage(e.target.value)}
-            className="border-[1px] border-black text-black outline-none px-2"
-          >
+            className="border-[1px] border-black text-black outline-none px-2">
             <option value="Javascript">Javascript</option>
             <option value="Python">Python</option>
           </select>
@@ -123,23 +120,21 @@ export default function ImportRepo() {
 
       {files?.length > 0 && (
         <div
-          className={`px-3 w-[90%] mx-auto border-[1px]  border-gray-200 bg-black my-9 overflow-y-auto`}
-        >
+          className={`px-3 w-[90%] mx-auto border-[1px]  border-gray-200 bg-black my-9 overflow-y-auto py-5`}>
           <h2 className="mb-4 font-bold text-xl text-center">Results</h2>
           <ul>
             {files?.length > 0 ? (
               sortedFiles?.map((file, index) => {
-                const textColor = Math.trunc(rating[file] / 10);
+                const textColor = Math.trunc(rating[file] / 10)
                 return (
                   <li
                     key={index}
                     className={`p-2 ${ratingClasses[textColor]}    border-gray-100  mt-1 cursor-pointer hover:bg-gray-700 transition flex justify-between`}
-                    onClick={() => handleFileClick(file)}
-                  >
+                    onClick={() => handleFileClick(file)}>
                     <p>{file}</p>
                     <p>{Number(rating[file])}%</p>
                   </li>
-                );
+                )
               })
             ) : (
               <p>No files found.</p>
@@ -148,5 +143,5 @@ export default function ImportRepo() {
         </div>
       )}
     </div>
-  );
+  )
 }
