@@ -5,6 +5,7 @@ import GradientComponent from "../GradientComponent";
 
 import RepoListModal from "../RepoListModal";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 const Hero = () => {
   const { data: session } = useSession();
   const [repos, setRepos] = useState([]);
@@ -53,8 +54,8 @@ const Hero = () => {
           Link Repository
         </button>
         {isModalOpen && <RepoListModal setIsModalOpen={setIsModalOpen} />}
-        <button className="border-2 border-red-500 hover:ring-4  hover:ring-red-500 hover:ring-opacity-40  duration-300  px-8 py-3 rounded-lg font-semibold  flex gap-3 items-center text-gray-200">
-          <a href={"/checkwithurl"} className="flex gap-3 items-center">
+        <Link href={"/checkwithurl"} className="border-2 border-red-500 hover:ring-4  hover:ring-red-500 hover:ring-opacity-40  duration-300  px-8 py-3 rounded-lg font-semibold  flex gap-3 items-center text-gray-200">
+          <p className="flex gap-3 items-center">
             <svg
               viewBox="0 0 15 15"
               fill="none"
@@ -69,8 +70,8 @@ const Hero = () => {
             </svg>
 
             <span className="">Check with URL</span>
-          </a>
-        </button>
+          </p>
+        </Link>
       </div>
     </div>
   );
