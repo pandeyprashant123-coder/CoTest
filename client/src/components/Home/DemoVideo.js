@@ -1,9 +1,9 @@
-import React from "react"
-import TopLetter from "../TopLetter"
+import React from "react";
+import TopLetter from "../TopLetter";
 
 const DemoVideo = () => {
   //   const iframeUrl = `https://www.youtube.com/embed/${videoId}`
-  const iframeUrl = ""
+  const iframeUrl = "";
   return (
     // <div className="flex flex-col items-center justify-center w-[70%] mx-auto gap-10">
     //   <div>Demo Video</div>
@@ -41,19 +41,19 @@ const DemoVideo = () => {
         </div>
         <div className="flex flex-wrap justify-center items-center gap-12">
           <iframe
-            // width="560"
-            // height="315"
-            className="w-full aspect-video"
-            src="https://www.youtube.com/embed/FrhCAn76f_c?si=bKRCVnUyq4-gXtqe"
-            title="CoTest Demo Video"
+            width="560"
+            height="315"
+            src="https://www.youtube.com/embed/1A6hgnekZ1k?si=eYpvNmHUbqxhjvfz"
+            title="YouTube video player"
             frameborder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             referrerpolicy="strict-origin-when-cross-origin"
-            allowfullscreen></iframe>
+            allowfullscreen
+          ></iframe>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default DemoVideo
+export default DemoVideo;

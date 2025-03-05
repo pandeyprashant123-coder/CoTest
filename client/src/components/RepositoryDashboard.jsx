@@ -18,7 +18,7 @@ const ratingClasses = {
 };
 const languageColor = {
   JavaScript: "bg-yellow-500",
-  Python: "bg-blue-500",
+  Python: "bg-yellow-900",
   Java: "bg-red-500",
   C: "bg-gray-500",
   Cpp: "bg-gray-500",
@@ -29,7 +29,8 @@ const languageColor = {
   SCSS: "bg-blue-500",
   Shell: "bg-gray-500",
   TypeScript: "bg-blue-500",
-}
+  "Jupyter Notebook": "bg-orange-500",
+};
 
 const RepositoryDashboard = () => {
   const [link, setLink] = useState("");
@@ -163,7 +164,11 @@ const RepositoryDashboard = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
             {/* Overall Rating */}
-            <div className="bg-white shadow rounded-lg p-5">
+            <div
+              className="bg-white shadow rounded-lg p-5"
+              data-tooltip-target="tooltip-bottom"
+              data-tooltip-placement="bottom"
+            >
               <h2 className="text-sm text-gray-600 mb-2">Overall rating</h2>
               <div
                 className={`text-5xl font-bold ${
@@ -172,6 +177,14 @@ const RepositoryDashboard = () => {
               >
                 {calculateOverallRating()}%
               </div>
+            </div>
+            <div
+              id="tooltip-bottom"
+              role="tooltip"
+              class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-700"
+            >
+              Tooltip on bottom
+              <div class="tooltip-arrow" data-popper-arrow></div>
             </div>
 
             {/* Executable LOC */}
@@ -194,23 +207,28 @@ const RepositoryDashboard = () => {
             <div className="bg-white shadow rounded-lg p-5">
               <h2 className="text-sm text-gray-600 mb-2">Languages</h2>
               <div className="flex items-center justify-center">
-                {
-                  Object.entries(language).map(([key, value]) => {
-                    let total = 0;
-                    Object.values(language).forEach((val) => {
-                      total += val;
-                    });
-                    return(
+                {Object.entries(language).map(([key, value]) => {
+                  let total = 0;
+                  Object.values(language).forEach((val) => {
+                    total += val;
+                  });
+                  return (
                     <div className="flex flex-col">
-                      <div className={`w-12 h-12 ${languageColor[key]} rounded-full flex  items-center justify-center`}>
-                        <span className="text-xs text-white">{(value/total *100).toFixed(2)}%</span>
+                      <div
+                        className={`w-12 h-12 ${languageColor[key]} rounded-full flex  items-center justify-center`}
+                      >
+                        <span className="text-xs text-white">
+                          {((value / total) * 100).toFixed(2)}%
+                        </span>
                       </div>
-                      <span className={`flex  justify-center text-xs text-gray-500`}>
+                      <span
+                        className={`flex  justify-center text-xs text-gray-500`}
+                      >
                         {key}
                       </span>
                     </div>
-                  )})
-                }
+                  );
+                })}
               </div>
             </div>
 
