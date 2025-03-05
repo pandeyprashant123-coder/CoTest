@@ -26,22 +26,22 @@ const Footer = () => {
             <h4 className="text-md font-semibold mb-4">Product</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <a href="#" className="text-gray-400 hover:opacity-80 ">
+                <a className="text-gray-400 cursor-pointer hover:opacity-80 ">
                   Features
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-400 hover:opacity-80 ">
+                <a className="text-gray-400 cursor-pointer hover:opacity-80 ">
                   Pricing
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-400 hover:opacity-80 ">
+                <a className="text-gray-400 cursor-pointer hover:opacity-80 ">
                   Integrations
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-400 hover:opacity-80 ">
+                <a className="text-gray-400 cursor-pointer hover:opacity-80 ">
                   Roadmap
                 </a>
               </li>
@@ -52,22 +52,22 @@ const Footer = () => {
             <h4 className="text-md font-semibold mb-4">Company</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <a href="#=" className="text-gray-400 hover:opacity-80 ">
+                <a className="text-gray-400 cursor-pointer hover:opacity-80 ">
                   About Us
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-400 hover:opacity-80 ">
+                <a className="text-gray-400 cursor-pointer hover:opacity-80 ">
                   Careers
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-400 hover:opacity-80 ">
+                <a className="text-gray-400 cursor-pointer hover:opacity-80 ">
                   Contact
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-400 hover:opacity-80 ">
+                <a className="text-gray-400 cursor-pointer hover:opacity-80 ">
                   Privacy Policy
                 </a>
               </li>
