@@ -1,14 +1,22 @@
-import RepositoryList from "@/components/RepositoryList";
-import { useSession } from "next-auth/react";
-import React from "react";
+import RepositoryList from "@/components/RepositoryList"
+import { useSession } from "next-auth/react"
+import Head from "next/head"
+import React from "react"
 
 const Repository = () => {
-  const { data: session } = useSession();
+  const { data: session } = useSession()
   return (
-    <div>
-      <RepositoryList accessToken={session?.accessToken} />
-    </div>
-  );
-};
+    <>
+      <Head>
+        <title>Repository Page | CoTest</title>
+        <meta property="og:description" content="A good repository page" />
+      </Head>
 
-export default Repository;
+      <div>
+        <RepositoryList accessToken={session?.accessToken} />
+      </div>
+    </>
+  )
+}
+
+export default Repository
