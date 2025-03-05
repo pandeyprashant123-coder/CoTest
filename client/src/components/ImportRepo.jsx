@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import React, { useState, useEffect } from "react";
 import RepoListModal from "./RepoListModal";
 import ResultTable from "./Table/ResultTable";
+import Link from "next/link";
 
 export default function ImportRepo() {
   const [link, setLink] = useState(
@@ -96,14 +97,14 @@ export default function ImportRepo() {
             className="py-3 px-6 border-[1px] border-black text-black w-[500px]"
           /> */}
         </div>
-        <button
-          type="submit"
+        <Link
+          href="/dashboard"
           className="py-3 px-6 w-max border-[1px] border-black hover:bg-gray-300 hover:text-black rounded-lg"
           onClick={handleSubmit}
           disabled={loading}
         >
           {loading ? `Loading...` : `Check Files`}
-        </button>
+        </Link>
         {/* <p>{result}</p> */}
       </div>
       {error && <div style={{ color: "red" }}>{error}</div>}
