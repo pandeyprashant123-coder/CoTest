@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import { Kanit } from "next/font/google"
 import Image from "next/image"
+import Link from "next/link"
+import { useRouter } from "next/router"
 
 const kanit = Kanit({
   weight: ["100", "200", "300", "500", "600", "700", "800", "400"],
@@ -8,6 +10,7 @@ const kanit = Kanit({
 })
 
 const RepositoryList = ({ accessToken }) => {
+  const router = useRouter()
   const [repos, setRepos] = useState([])
   const [page, setPage] = useState(1)
   const [loading, setLoading] = useState(false)
@@ -52,6 +55,11 @@ const RepositoryList = ({ accessToken }) => {
       "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg",
     GraphQL:
       "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/graphql/graphql-plain.svg",
+  }
+
+  const changeCurrentRepo = (settingrepo) => {
+    localStorage.setItem("selectedRepoUrl", settingrepo)
+    router.push("/dashboard")
   }
 
   const fetchRepositories = async () => {
@@ -139,7 +147,7 @@ const RepositoryList = ({ accessToken }) => {
                   )}
                 </td>
                 {/* <td>{repo.stargazers_count}</td> */}
-                <td className=" px-5">
+                <td className=" pl-5">
                   <a
                     href={repo.html_url}
                     target="_blank"
@@ -147,6 +155,15 @@ const RepositoryList = ({ accessToken }) => {
                     className="bg-gray-200 px-3 py-1 text-black">
                     View
                   </a>
+                </td>
+                <td className=" pr-5">
+                  <div
+                    // href={`/check?repo=${repo.html_url}`}
+                    onClick={() => changeCurrentRepo(repo.html_url)}
+                    rel="noopener noreferrer"
+                    className="bg-gray-200 px-3 py-1 text-black cursor-pointer">
+                    Test
+                  </div>
                 </td>
               </tr>
             ))}

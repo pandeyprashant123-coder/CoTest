@@ -1,13 +1,11 @@
-import { useRouter } from "next/router";
-import React, { useState, useEffect } from "react";
-import RepoListModal from "./RepoListModal";
-import ResultTable from "./Table/ResultTable";
-import Link from "next/link";
+import { useRouter } from "next/router"
+import React, { useState, useEffect } from "react"
+import RepoListModal from "./RepoListModal"
+import ResultTable from "./Table/ResultTable"
+import Link from "next/link"
 
-export default function ImportRepo({ repo }) {
-  const [link, setLink] = useState(
-    localStorage.getItem("selectedRepoUrl") || ""
-  )
+export default function RepoLinkImport() {
+  const [link, setLink] = useState("")
   const [result, setResult] = useState(null)
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -18,14 +16,14 @@ export default function ImportRepo({ repo }) {
   const router = useRouter()
   const [rating, setRating] = useState(null)
 
-  useEffect(() => {
-    const savedRepoUrl = localStorage.getItem("selectedRepoUrl")
-    if (savedRepoUrl) {
-      setLink(savedRepoUrl)
-    }
-  }, [flag]);
+  //   useEffect(() => {
+  //     const savedRepoUrl = localStorage.getItem("selectedRepoUrl")
+  //     if (savedRepoUrl) {
+  //       setLink(savedRepoUrl)
+  //     }
+  //   }, [flag])
 
-  console.log(link);
+  console.log(link)
   const handleSubmit = async () => {
     // e.preventDefault();
     setError(null)
@@ -37,14 +35,14 @@ export default function ImportRepo({ repo }) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ link }),
-      });
-      const data = await res.json();
+      })
+      const data = await res.json()
       if (res.ok) {
-        console.log(data);
-        setFiles(data.majorReport);
+        console.log(data)
+        setFiles(data.majorReport)
         // setFiles(data.files);
         // setRating(data.majorReport);
-        setLoading(false);
+        setLoading(false)
       } else {
         setError(data.error)
         setLoading(false)
@@ -56,37 +54,36 @@ export default function ImportRepo({ repo }) {
   }
 
   const handleFileClick = (fileName) => {
-    const url = `/codeViewer?file=${encodeURIComponent(fileName)}`;
-    window.open(url, "_blank");
-  };
+    const url = `/codeViewer?file=${encodeURIComponent(fileName)}`
+    window.open(url, "_blank")
+  }
   const sortedFiles = files.sort(
     (a, b) => parseFloat(a.rating) - parseFloat(b.rating)
-  );
+  )
   return (
     <div className="flex w-[80%] mx-auto flex-col min-h-[30vh] items-center justify-center pt-10">
       <div
         // onSubmit={handleSubmit}
-        className="p-5 flex flex-col items-center gap-3 mx-auto"
-      >
-        <h1>
+        className="flex items-center gap-3 mx-auto">
+        {/* <h1>
           Currently selected Repo:{" "}
-          {`${link.split("/")[link.split("/").length - 1]}`} 
-        </h1>
-        <div className="flex flex-row justify-center w-full mx-auto gap-3">
-          <button
+          {`${link.split("/")[link.split("/").length - 1]}`}
+        </h1> */}
+        <div className="flex flex-row justify-center w-full mx-auto gap-3 items-center">
+          {/* <button
             className="bg-blue-500 text-white px-4 py-2 rounded-lg"
             onClick={() => setIsModalOpen(true)}
             disabled={loading}>
             {loading ? "Loading..." : "Select Repository"}
-          </button>
-          {isModalOpen && (
+          </button> */}
+          {/* {isModalOpen && (
             <RepoListModal
               setIsModalOpen={setIsModalOpen}
               flag={flag}
               setFlag={setFlag}
             />
-          )}
-          {/* <input
+          )} */}
+          <input
             type="text"
             id="text"
             value={link}
@@ -94,16 +91,15 @@ export default function ImportRepo({ repo }) {
             placeholder="Enter GitHub repo link"
             required
             className="py-3 px-6 border-[1px] border-black text-black w-[500px]"
-          /> */}
+          />
+          <Link
+            href="/dashboard"
+            className=" border-[2px] border-white hover:bg-gray-300 hover:text-black px-4 py-2 text-lg duration-300"
+            onClick={handleSubmit}
+            disabled={loading}>
+            {loading ? `Loading...` : `Check Files`}
+          </Link>
         </div>
-        <Link
-          href="/dashboard"
-          className="py-3 px-6 w-max border-[1px] border-black hover:bg-gray-300 hover:text-black rounded-lg"
-          onClick={handleSubmit}
-          disabled={loading}
-        >
-          {loading ? `Loading...` : `Check Files`}
-        </Link>
         {/* <p>{result}</p> */}
       </div>
       {error && <div style={{ color: "red" }}>{error}</div>}

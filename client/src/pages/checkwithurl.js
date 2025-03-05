@@ -7,24 +7,23 @@ import { useEffect } from "react"
 import { useRouter } from "next/router"
 import { signin } from "@/utils/auth"
 import { useSearchParams } from "next/navigation"
+import RepoLinkImport from "@/components/RepoLinkImport"
 
 const kanit = Kanit({
   weight: ["100", "200", "300", "500", "600", "700", "800", "400"],
   subsets: ["latin"],
 })
 
-const Check = () => {
+const Checkwithurl = () => {
   const { data: session, status } = useSession()
-  const repo = useSearchParams() ? useSearchParams() : ""
-  console.log("Repo", repo)
 
   const router = useRouter()
 
-  useEffect(() => {
-    if (status === "unauthenticated") {
-      signIn("github");
-    }
-  }, [status, router])
+  //   useEffect(() => {
+  //     if (status === "unauthenticated") {
+  //       signIn("github")
+  //     }
+  //   }, [status, router])
 
   if (status === "loading") {
     return <p>Loading...</p>
@@ -38,11 +37,11 @@ const Check = () => {
       </Head>
       <div className={`${kanit.className} min-h-[65vh] `}>
         <div>
-          <ImportRepo repo={repo} />
+          <RepoLinkImport />
         </div>
       </div>
     </>
   )
 }
 
-export default Check
+export default Checkwithurl
