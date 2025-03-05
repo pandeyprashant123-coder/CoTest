@@ -36,6 +36,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-/next.confing.mjs
+/next.config.mjs
 
-temp.js
+/temp.js

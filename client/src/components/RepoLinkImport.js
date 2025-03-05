@@ -1,20 +1,20 @@
-import { useRouter } from "next/router"
-import React, { useState, useEffect } from "react"
-import RepoListModal from "./RepoListModal"
-import ResultTable from "./Table/ResultTable"
-import Link from "next/link"
+import { useRouter } from "next/router";
+import React, { useState, useEffect } from "react";
+import RepoListModal from "./RepoListModal";
+import ResultTable from "./Table/ResultTable";
+import Link from "next/link";
 
 export default function RepoLinkImport() {
-  const [link, setLink] = useState("")
-  const [result, setResult] = useState(null)
-  const [error, setError] = useState(null)
-  const [loading, setLoading] = useState(false)
-  const [language, setLanguage] = useState("Javascript")
-  const [files, setFiles] = useState([])
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [flag, setFlag] = useState(0)
-  const router = useRouter()
-  const [rating, setRating] = useState(null)
+  const [link, setLink] = useState("");
+  const [result, setResult] = useState(null);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [language, setLanguage] = useState("Javascript");
+  const [files, setFiles] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [flag, setFlag] = useState(0);
+  const router = useRouter();
+  const [rating, setRating] = useState(null);
 
   //   useEffect(() => {
   //     const savedRepoUrl = localStorage.getItem("selectedRepoUrl")
@@ -23,48 +23,26 @@ export default function RepoLinkImport() {
   //     }
   //   }, [flag])
 
-  console.log(link)
+  console.log(link);
   const handleSubmit = async () => {
     // e.preventDefault();
-    setError(null)
-    setLoading(true)
-    try {
-      const res = await fetch("/api/runtest", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ link }),
-      })
-      const data = await res.json()
-      if (res.ok) {
-        console.log(data)
-        setFiles(data.majorReport)
-        // setFiles(data.files);
-        // setRating(data.majorReport);
-        setLoading(false)
-      } else {
-        setError(data.error)
-        setLoading(false)
-      }
-    } catch (err) {
-      setError("An unexpected error occurred")
-      setLoading(false)
-    }
-  }
+    localStorage.setItem("selectedRepoUrl", link);
+    router.push(`/dashboard`);
+  };
 
   const handleFileClick = (fileName) => {
-    const url = `/codeViewer?file=${encodeURIComponent(fileName)}`
-    window.open(url, "_blank")
-  }
+    const url = `/codeViewer?file=${encodeURIComponent(fileName)}`;
+    window.open(url, "_blank");
+  };
   const sortedFiles = files.sort(
     (a, b) => parseFloat(a.rating) - parseFloat(b.rating)
-  )
+  );
   return (
     <div className="flex w-[80%] mx-auto flex-col min-h-[30vh] items-center justify-center pt-10">
       <div
         // onSubmit={handleSubmit}
-        className="flex items-center gap-3 mx-auto">
+        className="flex items-center gap-3 mx-auto"
+      >
         {/* <h1>
           Currently selected Repo:{" "}
           {`${link.split("/")[link.split("/").length - 1]}`}
@@ -92,13 +70,14 @@ export default function RepoLinkImport() {
             required
             className="py-3 px-6 border-[1px] border-black text-black w-[500px]"
           />
-          <Link
-            href="/dashboard"
+          <button
+            // href="/dashboard"
             className=" border-[2px] border-white hover:bg-gray-300 hover:text-black px-4 py-2 text-lg duration-300"
             onClick={handleSubmit}
-            disabled={loading}>
+            disabled={loading}
+          >
             {loading ? `Loading...` : `Check Files`}
-          </Link>
+          </button>
         </div>
         {/* <p>{result}</p> */}
       </div>
@@ -176,5 +155,5 @@ export default function RepoLinkImport() {
         </div>
       )}
     </div>
-  )
+  );
 }

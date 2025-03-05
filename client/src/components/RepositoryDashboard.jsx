@@ -143,7 +143,7 @@ const RepositoryDashboard = () => {
 
         <div className="max-w-[90%] mx-auto">
           <div className="flex items-center gap-3">
-            <h1 className=" text-2xl font-bold mb-6">REPOSITORY DASHBOARD</h1>
+            <h1 className=" text-2xl font-bold mb-6">REPOSITORY : {}</h1>
             <div className="text-sm text-gray-100 mb-4 flex items-center gap-1">
               <svg
                 viewBox="0 0 15 15"

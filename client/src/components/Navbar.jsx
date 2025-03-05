@@ -1,40 +1,42 @@
-import Image from "next/image"
-import Link from "next/link"
-import React, { useEffect, useState, useRef } from "react"
-import LoginButton from "./LoginButton"
-import { Kanit } from "next/font/google"
+import Image from "next/image";
+import Link from "next/link";
+import React, { useEffect, useState, useRef } from "react";
+import LoginButton from "./LoginButton";
+import { Kanit } from "next/font/google";
 
 const kanit = Kanit({
   weight: ["100", "200", "300", "500", "600", "700", "800", "400"],
   subsets: ["latin"],
-})
+});
 
 const Navbar = () => {
-  const [border, setBorder] = useState(false)
-  const navRef = useRef(null)
+  const [border, setBorder] = useState(false);
+  const navRef = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => {
-      setBorder(window.scrollY > 50)
-    }
+      setBorder(window.scrollY > 50);
+    };
 
-    window.addEventListener("scroll", handleScroll)
+    window.addEventListener("scroll", handleScroll);
 
     return () => {
-      window.removeEventListener("scroll", handleScroll)
-    }
-  }, [])
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   return (
     <div
       className={`sticky top-0 flex flex-row justify-between items-center w-full py-4 px-20 mx-auto font-[Inter] text-sm ${
         border ? "border-b border-gray-100 border-opacity-20" : ""
       } shadow-sm backdrop-blur-sm ${kanit.className} z-50`}
-      ref={navRef}>
+      ref={navRef}
+    >
       <div className="flex items-center gap-10">
         <Link
           href="/"
-          className="flex flex-row gap-2 items-center cursor-pointer">
+          className="flex flex-row gap-2 items-center cursor-pointer"
+        >
           <p className="text-xl font-bold">
             <span className="text-[#715DE3]">Co</span>Test
           </p>
@@ -50,7 +52,7 @@ const Navbar = () => {
             <Link href="/repository" className="hover:opacity-80">
               Repository
             </Link>
-            <Link href="/check" className="hover:opacity-80">
+            <Link href="/checkwithurl" className="hover:opacity-80">
               URL Check
             </Link>
           </ul>
@@ -60,7 +62,7 @@ const Navbar = () => {
         <LoginButton />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;
