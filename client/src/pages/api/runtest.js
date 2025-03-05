@@ -1,16 +1,14 @@
 import axios from "axios";
-
 import analysisQueue from "./config/bull";
-import {
-  fetchRepoContentsJavascript,
-  fetchRepoContentsPython,
-} from "./services/GithubActions";
+import { fetchRepoContents } from "./services/GithubActions";
 import { test } from "./services/analizer";
 import { addFilesToQueue } from "./services/queue";
 import { repoSchema } from "./validation/github";
 import calculatePerformanceRating from "./services/calculateReport";
 import extractFileNameFromURL from "./services/extractFileName";
 import redis from "./config/redis";
+import parser from "./config/parser";
+import calculateELOC from "./modules/calculateELOC";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -18,102 +16,102 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { link, language } = repoSchema.parse(req.body);
-    let files;
+    const { link } = repoSchema.parse(req.body);
+    const {
+      pythonFiles = [],
+      jsFiles = [],
+      language = [],
+    } = await fetchRepoContents(link);
 
-    if (language === "Javascript") {
-      files = await fetchRepoContentsJavascript(link);
-    } else if (language === "Python") {
-      files = await fetchRepoContentsPython(link);
-    }
-
-    if (!files || files.length === 0) {
+    if (jsFiles.length === 0 && pythonFiles.length === 0) {
       return res
         .status(404)
         .json({ error: "No files found in the repository" });
     }
 
-    await addFilesToQueue(files, language);
+    await Promise.all([
+      addFilesToQueue(jsFiles, "Javascript"),
+      addFilesToQueue(pythonFiles, "Python"),
+    ]);
 
-    // Wait for analysis to complete before sending response
-    await waitForAnalysisCompletion(files);
+    const allFiles = [...jsFiles, ...pythonFiles];
+    await waitForAnalysisCompletion(allFiles);
 
-    // Retrieve all reports from Redis
-    const majorReport = await getAllReports(files);
-    const fileNames = files.map((file) => {
-      return extractFileNameFromURL(file);
-    });
-
-    res.status(200).json({ files: fileNames, majorReport });
+    const majorReport = await getAllReports(allFiles);
+    return res.status(200).json({ majorReport, language });
   } catch (error) {
-    res.status(500).json({ error: "Internal Server Error" });
+    console.error("Handler Error:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 }
 
-// Process analysis queue
 analysisQueue.process(async (job) => {
   const { code, fileName, language } = job.data;
-  console.log(`Processing file: ${fileName}`);
+  console.log(`Processing file: ${fileName} in ${language}`);
 
   if (!code) {
-    console.log(`No code received for ${fileName}`);
+    console.warn(`No code received for ${fileName}`);
     return;
   }
-
   try {
     let message;
-    if (language === "Javascript") {
-      message = await test(code);
-    } else if (language === "Python") {
-      const response = await axios.post(process.env.PYHON_API_URL, { code });
-      message = response.data;
-    }
-    const rating = calculatePerformanceRating(message);
-    console.log(rating);
+    let ELOC = 0;
 
-    // Store analysis result in Redis
-    const result = {
-      code,
-      message,
-      rating,
-      language,
-    };
+    if (language === "Javascript") {
+      const tree = parser.parse(code);
+      ELOC = calculateELOC(tree.rootNode);
+      message = await test(code, tree);
+    } else if (language === "Python") {
+      const response = await axios.post(process.env.PYTHON_API_URL, { code });
+      const code_report = response.data;
+      message = code_report.errors;
+      ELOC = code_report.total_eloc;
+    }
+
+    const rating = calculatePerformanceRating(message || []);
+    const issues = Array.isArray(message) ? message.length : 0;
+
+    const result = { code, message, rating, language, issues, ELOC };
     await redis.set(`report:${fileName}`, JSON.stringify(result));
 
     console.log(`Stored analysis for ${fileName}`);
   } catch (error) {
-    console.error(`Error analyzing code for ${fileName}:`, error.message);
+    console.error(`Error analyzing code for ${fileName}:`, error);
   }
 });
 
 async function waitForAnalysisCompletion(files) {
   const fileNames = files.map((file) => extractFileNameFromURL(file));
-
   return new Promise((resolve) => {
     const interval = setInterval(async () => {
       const results = await Promise.all(
-        fileNames.map(async (fileName) => redis.get(`report:${fileName}`))
+        fileNames.map((fileName) => redis.get(`report:${fileName}`))
       );
 
-      // Check if all files have been processed
       if (results.every((result) => result !== null)) {
         clearInterval(interval);
         resolve();
       }
-    }, 500); // Check every 500ms
+    }, 500);
   });
 }
 
-// Retrieve all reports from Redis
 async function getAllReports(files) {
   const fileNames = files.map((file) => extractFileNameFromURL(file));
 
   const reports = await Promise.all(
     fileNames.map(async (fileName) => {
       const report = await redis.get(`report:${fileName}`);
-      return [fileName, report ? JSON.parse(report).rating : {}];
+      if (!report) return null;
+      const parsedReport = JSON.parse(report);
+      return {
+        fileName,
+        rating: parsedReport.rating,
+        issues: parsedReport.issues,
+        ELOC: parsedReport.ELOC,
+      };
     })
   );
 
-  return Object.fromEntries(reports);
+  return reports.filter(Boolean);
 }

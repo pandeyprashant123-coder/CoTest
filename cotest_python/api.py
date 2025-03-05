@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from cotest_python.models import CodeInput
+from cotest_python.models import ReviewResponse
 from cotest_python.reviewer import Reviewer
 
 app = FastAPI()
@@ -19,8 +20,8 @@ app.add_middleware(
 @app.post("/review_python_code")
 def review_code(data: CodeInput):
     reviewer = Reviewer()
-    errors = reviewer.review(data.code)
-    return errors
+    errors, total_eloc = reviewer.review(data.code)
+    return ReviewResponse(errors=errors, total_eloc=total_eloc)
 
 
 if __name__ == "__main__":

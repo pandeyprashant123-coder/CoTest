@@ -10,3 +10,9 @@ class CodeError(BaseModel):
     severity: int
     line: int
     endline: int
+    column: int = 0
+
+
+class ReviewResponse(BaseModel):
+    errors: list[CodeError]
+    total_eloc: int

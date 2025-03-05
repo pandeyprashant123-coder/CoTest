@@ -37,8 +37,10 @@ export default function CodeViewer() {
         setLanguage(data.language);
         setSeverityList((prevList) => {
           const newSeverities =
-            data.message?.map(message => {
-              return message.stringSeverity ?message.stringSeverity: message.severity;
+            data.message?.map((message) => {
+              return message.stringSeverity
+                ? message.stringSeverity
+                : message.severity;
             }) || [];
           return [...prevList, ...newSeverities];
         });
@@ -73,7 +75,7 @@ export default function CodeViewer() {
           height="800px"
           language="javascript"
           value={codeData}
-          options={{ readOnly: true }}
+          options={{ readOnly: true, glyphMargin: true }}
           loading={<p>Loading editor...</p>}
           onMount={(editor, monaco) => {
             const model = editor.getModel();
@@ -94,6 +96,22 @@ export default function CodeViewer() {
               }));
               editor.createDecorationsCollection(decorations);
             }
+            editor.onMouseMove((e) => {
+              if (
+                e.target.type ===
+                monaco.editor.MouseTargetType.GUTTER_GLYPH_MARGIN
+              ) {
+                const lineNumber = e.target.position?.lineNumber;
+                const matchingError = errors.find(
+                  (err) => err.line === lineNumber
+                );
+
+                if (matchingError) {
+                  // You could implement a custom hover here if needed
+                  editor.createContextKey("showErrorHover", true);
+                }
+              }
+            });
           }}
         />
       ) : (
