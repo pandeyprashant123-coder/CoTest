@@ -1,4 +1,5 @@
 let messages = [];
+
 function traverse(node) {
   const credentialPatterns = [
     /password/i,
@@ -11,55 +12,108 @@ function traverse(node) {
     /(access|private|public|secret|master)[_-]?(key|token|password)/i,
   ];
 
-  // A stricter pattern for identifying actual credentials (e.g., API keys, passwords)
-  const valuePatterns = [
-    /^[a-zA-Z0-9-_]{32,}$/i, // Matches long alphanumeric strings (API keys, tokens)
-    /[\d]{8,}/, // Matches numbers like 12345678 (potentially a weak password)
-  ];
+  const valuePatterns = [/^[a-zA-Z0-9-_]{32,}$/i, /[\d]{8,}/];
 
-  if (!node) {
-    return;
-  }
-  let message = {
-    severity: 8,
-    message: "Hard coded credentials detected",
-    line: 0,
-    column: 0,
-    endColumn: 0,
-  };
+  if (!node) return;
 
+  // Check variable declarations
   if (node.type === "variable_declarator") {
-    const variableName = node.childForFieldName("name")?.text;
-    const variableValue = node.childForFieldName("init")?.text; // Assuming the value is in 'init'
+    // Get variable name - handle different AST structures
+    let variableName = "";
+    let variableValue = "";
 
-    // Skip checking if there's no value assigned
-    if (variableValue) {
-      // Check for patterns in both name and value
+    // Try different accessor methods for name
+    const nameNode =
+      node.childForFieldName?.("name") ||
+      node.children?.find((c) => c.type === "identifier") ||
+      node.name;
+
+    if (nameNode) {
+      variableName = nameNode.text || nameNode.value || nameNode.toString();
+    }
+
+    // Try different accessor methods for value/init
+    const valueNode =
+      node.childForFieldName?.("init") ||
+      node.children?.find(
+        (c) => c.type.includes("literal") || c.type.includes("expression")
+      ) ||
+      node.value ||
+      node.init;
+
+    if (valueNode) {
+      variableValue = valueNode.text || valueNode.value || valueNode.toString();
+    }
+
+    // Only proceed if we have both name and value
+    if (variableName && variableValue) {
+      // Check for credential patterns in variable name
       for (let pattern of credentialPatterns) {
-        if (pattern.test(variableName) || pattern.test(variableValue)) {
-          const { startPosition } = node;
-          message.line = startPosition.row + 1;
-          message.column = startPosition.column + 1;
-          messages.push(message);
+        if (pattern.test(variableName)) {
+          const startPosition = node.startPosition ||
+            node.location?.start || { row: 0, column: 0 };
+          messages.push({
+            severity: 8,
+            message: "Hard coded credentials detected in variable name",
+            line: (startPosition.row || startPosition.line) + 1,
+            column: (startPosition.column || startPosition.col) + 1,
+            endColumn: 0,
+          });
+          break; // Avoid duplicate messages for the same variable
         }
       }
 
-      // Now check if the variable's value itself matches a credential-like pattern (like a key or password)
+      // Check for suspicious values
       for (let valuePattern of valuePatterns) {
         if (valuePattern.test(variableValue)) {
-          const { startPosition, endPosition } = node;
-          message.line = startPosition.row + 1;
-          message.column = startPosition.column + 1;
-          message.endColumn = endPosition.column + 1;
-          message.message = "Possible hardcoded credential detected in value";
-          messages.push(message);
+          const startPosition = node.startPosition ||
+            node.location?.start || { row: 0, column: 0 };
+          const endPosition = node.endPosition ||
+            node.location?.end || { row: 0, column: 0 };
+
+          messages.push({
+            severity: 8,
+            message: "Possible hardcoded credential detected in value",
+            line: (startPosition.row || startPosition.line) + 1,
+            column: (startPosition.column || startPosition.col) + 1,
+            endColumn: (endPosition.column || endPosition.col) + 1,
+          });
+          break; // Avoid duplicate messages for the same value
         }
       }
     }
   }
 
-  for (let child of node.children) {
-    traverse(child);
+  // Also check for string literals in other contexts (e.g., function parameters)
+  if (node.type?.includes("string") || node.type?.includes("literal")) {
+    const value = node.text || node.value || node.toString();
+
+    // Check if it looks like a credential
+    for (let valuePattern of valuePatterns) {
+      if (valuePattern.test(value)) {
+        const startPosition = node.startPosition ||
+          node.location?.start || { row: 0, column: 0 };
+
+        messages.push({
+          severity: 8,
+          message: "Possible hardcoded credential detected in string literal",
+          line: (startPosition.row || startPosition.line) + 1,
+          column: (startPosition.column || startPosition.col) + 1,
+          endColumn: 0,
+        });
+        break;
+      }
+    }
+  }
+
+  // Traverse children
+  if (node.children && Array.isArray(node.children)) {
+    for (let child of node.children) {
+      traverse(child);
+    }
+  } else if (typeof node.forEachChild === "function") {
+    // Handle TypeScript AST nodes which might use forEachChild
+    node.forEachChild((child) => traverse(child));
   }
 }
 

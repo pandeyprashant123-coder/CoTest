@@ -7,6 +7,9 @@ export async function fetchRepoContents(repoLink, dir = "") {
   try {
     const url = `/repos/${owner}/${repo}/contents${dir ? `/${dir}` : ""}`;
     const response = await githubApi.get(url);
+    if (!response.ok) {
+      console.log("unauthorized");
+    }
     const languageurl = `/repos/${owner}/${repo}/languages`;
     const reponse2 = await githubApi.get(languageurl);
     const language = reponse2.data;
