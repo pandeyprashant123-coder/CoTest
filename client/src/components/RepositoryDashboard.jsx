@@ -34,13 +34,10 @@ const languageColor = {
 const RepositoryDashboard = () => {
   const [link, setLink] = useState("");
   const [result, setResult] = useState(null);
-  const [error, setError] = useState(null);
+  const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(false);
   const [language, setLanguage] = useState({});
   const [files, setFiles] = useState([]);
-  const router = useRouter();
-  const [rating, setRating] = useState(null);
-  const [overallRating, setOverallRating] = useState(null);
 
   useEffect(() => {
     const savedRepoUrl = localStorage.getItem("selectedRepoUrl");
@@ -55,7 +52,6 @@ const RepositoryDashboard = () => {
   }, [link]);
 
   const handleSubmit = async () => {
-    setError(null);
     setLoading(true);
     if (!link) {
       return;
@@ -68,18 +64,37 @@ const RepositoryDashboard = () => {
         },
         body: JSON.stringify({ link }),
       });
-      const data = await res.json();
-      if (res.ok) {
-        console.log(data);
-        setFiles(data.majorReport);
-        setLanguage(data.language);
-        setLoading(false);
-      } else {
-        setError(data.error);
-        setLoading(false);
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        const text = decoder.decode(value);
+        const lines = text.trim().split("\n");
+        lines.forEach((line) => {
+          const data = JSON.parse(line.replace("data: ", ""));
+          if (data.logs) {
+            setLoading(false);
+            setLogs((prevLogs) => [...prevLogs, ...data.logs]);
+          }
+          console.log(logs);
+          if (data.majorReport) {
+            setFiles(data.majorReport);
+            setLanguage(data.language);
+            eventSource.close(); // Close connection when final report is received
+          }
+        });
       }
+      // if (res.ok) {
+      //   console.log(data);
+      //   setFiles(data.majorReport);
+      //   setLanguage(data.language);
+      //   setLoading(false);
+      // } else {
+      //   setError(data.error);
+      //   setLoading(false);
+      // }
     } catch (err) {
-      setError("An unexpected error occurred");
       setLoading(false);
     }
   };

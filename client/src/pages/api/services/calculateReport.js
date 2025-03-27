@@ -6,7 +6,7 @@ function calculatePerformanceRating(message) {
     totalPoints += weight;
   });
 
-  const maxPoints = 100; // Define the maximum threshold for points
+  const maxPoints = 100; 
   const performanceRating = Math.max(0, 100 - (totalPoints / maxPoints) * 100);
   if (performanceRating < 1) {
     return 1;

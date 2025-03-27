@@ -8,7 +8,7 @@ async function lintCode(code, filename = "temp.js") {
     await ESLint.outputFixes(results);
     const messages = results[0].messages.map((msg) => ({
       ...msg,
-      stringSeverity: msg.severity === 2 ? 8 : 4,
+      stringSeverity: msg.severity === 2 ? 8 : 1,
     }));
     return messages;
   } catch (error) {

@@ -15,6 +15,9 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
+  res.setHeader("Content-Type", "text/event-stream");
+  res.setHeader("Cache-Control", "no-cache");
+  res.setHeader("Connection", "keep-alive");
   try {
     const { link } = repoSchema.parse(req.body);
     const {
@@ -24,9 +27,12 @@ export default async function handler(req, res) {
     } = await fetchRepoContents(link);
 
     if (jsFiles.length === 0 && pythonFiles.length === 0) {
-      return res
-        .status(404)
-        .json({ error: "No files found in the repository" });
+      res.write(
+        `data: ${JSON.stringify({
+          error: "No files found in the repository",
+        })}\n\n`
+      );
+      return res.end();
     }
 
     await Promise.all([
@@ -35,8 +41,21 @@ export default async function handler(req, res) {
     ]);
 
     const allFiles = [...jsFiles, ...pythonFiles];
+
+    const logInterval = setInterval(async () => {
+      const logs = await redis.lrange("analysis_logs", 0, -1);
+      console.log(logs);
+      if (logs.length > 0) {
+        res.write(`data: ${JSON.stringify({ logs })}\n\n`);
+        await redis.del("analysis_logs");
+      }
+    }, 500);
+
     const majorReport = await getAllReports(allFiles);
-    return res.status(200).json({ majorReport, language });
+
+    res.write(`data: ${JSON.stringify({ majorReport, language })}\n\n`);
+    clearInterval(logInterval);
+    res.end();
   } catch (error) {
     console.error("Handler Error:", error);
     return res.status(500).json({ error: "Internal Server Error" });
@@ -45,7 +64,11 @@ export default async function handler(req, res) {
 
 analysisQueue.process(async (job) => {
   const { code, fileName, language } = job.data;
-  console.log(`Processing file: ${fileName} in ${language}`);
+  // console.log(`Processing file: ${fileName} in ${language}`);
+  await redis.lpush(
+    "analysis_logs",
+    `Processing file: ${fileName} in ${language}`
+  );
 
   if (!code) {
     console.warn(`No code received for ${fileName}`);
@@ -54,7 +77,6 @@ analysisQueue.process(async (job) => {
   try {
     let message;
     let ELOC = 0;
-
     if (language === "Javascript") {
       const tree = parser.parse(code);
       ELOC = calculateELOC(tree.rootNode);
@@ -71,28 +93,14 @@ analysisQueue.process(async (job) => {
 
     const result = { code, message, rating, language, issues, ELOC };
     await redis.set(`report:${fileName}`, JSON.stringify(result));
-
-    console.log(`Stored analysis for ${fileName}`);
   } catch (error) {
     console.error(`Error analyzing code for ${fileName}:`, error);
+    await redis.lpush(
+      "analysis_logs",
+      `Error analyzing ${fileName}: ${error.message}`
+    );
   }
 });
-
-async function waitForAnalysisCompletion(files) {
-  const fileNames = files.map((file) => extractFileNameFromURL(file));
-  return new Promise((resolve) => {
-    const interval = setInterval(async () => {
-      const results = await Promise.all(
-        fileNames.map((fileName) => redis.get(`report:${fileName}`))
-      );
-
-      if (results.every((result) => result !== null)) {
-        clearInterval(interval);
-        resolve();
-      }
-    }, 500);
-  });
-}
 
 async function getAllReports(files) {
   const fileNames = files.map((file) => extractFileNameFromURL(file));
